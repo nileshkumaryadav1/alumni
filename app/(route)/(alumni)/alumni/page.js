@@ -1,20 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GraduationCap, Users, ArrowRight } from "lucide-react";
+import { Users, Search, PlusCircle } from "lucide-react";
 import Link from "next/link";
 
-export default function HomePage() {
+export default function AlumniPage() {
   return (
     <section className="flex min-h-screen py-12 flex-col items-center justify-center text-center px-6 bg-background text-foreground">
-      {/* Logo/Icon */}
+      {/* Icon */}
       <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", stiffness: 200, damping: 15 }}
+        initial={{ rotate: -45, opacity: 0 }}
+        animate={{ rotate: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
         className="mb-6"
       >
-        <GraduationCap className="w-20 h-20 text-accent" />
+        <Users className="w-20 h-20 text-accent" />
       </motion.div>
 
       {/* Title */}
@@ -24,41 +24,41 @@ export default function HomePage() {
         transition={{ duration: 0.6 }}
         className="text-4xl sm:text-6xl font-bold"
       >
-        Alumni Management System
+        Alumni Network
       </motion.h1>
 
       {/* Subtitle */}
       <motion.p
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.6 }}
         className="mt-4 text-lg sm:text-xl text-secondary max-w-2xl"
       >
-        Connect, engage, and grow with your alumni network. Stay in touch with
-        fellow graduates and build lasting relationships.
+        Discover, connect, and collaborate with fellow alumni.  
+        Search profiles, explore achievements, and grow together.
       </motion.p>
 
-      {/* Call to Action Buttons */}
+      {/* Actions */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
+        transition={{ delay: 0.6, duration: 0.6 }}
         className="mt-8 flex flex-wrap justify-center gap-4"
       >
         <Link
-          href="/alumni"
+          href="/alumni/search"
           className="inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-lg font-semibold text-background shadow-lg transition-transform hover:scale-105 hover:shadow-xl"
         >
-          <Users className="w-5 h-5" />
-          Explore Alumni
+          <Search className="w-5 h-5" />
+          Find Alumni
         </Link>
 
         <Link
-          href="/register"
+          href="/alumni/add"
           className="inline-flex items-center gap-2 rounded-xl border-2 border-accent px-6 py-3 text-lg font-semibold text-accent transition-transform hover:scale-105 hover:bg-accent hover:text-background"
         >
-          Get Started
-          <ArrowRight className="w-5 h-5" />
+          <PlusCircle className="w-5 h-5" />
+          Add Profile
         </Link>
       </motion.div>
     </section>
