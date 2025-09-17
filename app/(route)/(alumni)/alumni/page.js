@@ -46,7 +46,7 @@ export default function AlumniPage() {
         className="mt-8 flex flex-wrap justify-center gap-4"
       >
         <Link
-          href="/alumni/search"
+          href="/alumni"
           className="inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-lg font-semibold text-background shadow-lg transition-transform hover:scale-105 hover:shadow-xl"
         >
           <Search className="w-5 h-5" />
@@ -54,7 +54,7 @@ export default function AlumniPage() {
         </Link>
 
         <Link
-          href="/alumni/add"
+          href="/register"
           className="inline-flex items-center gap-2 rounded-xl border-2 border-accent px-6 py-3 text-lg font-semibold text-accent transition-transform hover:scale-105 hover:bg-accent hover:text-background"
         >
           <PlusCircle className="w-5 h-5" />
