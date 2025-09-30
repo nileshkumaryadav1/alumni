@@ -164,17 +164,16 @@ export default function ResetPasswordPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
               className="mt-6 flex flex-col gap-2 text-center"
-            >
-              <div className="flex justify-between m-2">
+            > <div className="flex justify-between w-full">
                 <Link
-                  href="/alumni-login"
-                  className="text-[var(--secondary)] hover:underline text-sm active:text-[var(--accent)]  border p-2 rounded-full border-border"
+                  href="/login"
+                  className="text-[var(--secondary)] hover:underline text-sm active:text-[var(--accent)]  border p-2 rounded-full border-border w-50"
                 >
-                  Alumni Login
+                  Login
                 </Link>
                 <Link
                   href="/admin/login"
-                  className="text-[var(--secondary)] hover:underline text-sm active:text-[var(--accent)] border p-2 rounded-full border-border"
+                  className="text-[var(--secondary)] hover:underline text-sm active:text-[var(--accent)] border p-2 rounded-full border-border w-50"
                 >
                   Admin Login
                 </Link>
@@ -185,12 +184,7 @@ export default function ResetPasswordPage() {
               >
                 Don&apos;t have an account? Register here.
               </Link>
-              <Link
-                href="/reset-password"
-                className="text-[var(--secondary)] hover:underline text-sm active:text-[var(--accent)]  border p-2 rounded-full border-border"
-              >
-                Forgot Password?
-              </Link>
+             
             </motion.div>
           </>
         )}

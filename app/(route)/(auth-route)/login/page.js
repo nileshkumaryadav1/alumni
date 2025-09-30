@@ -63,12 +63,12 @@ export default function LoginPage() {
         >
           Student Login
           <div className="flex justify-center gap-2 m-2">
-            <Link
+            {/* <Link
               href="/alumni-login"
               className="text-[var(--secondary)] hover:underline text-sm active:text-[var(--accent)]  border p-2 rounded-full border-border"
             >
               Alumni Login
-            </Link>
+            </Link> */}
             <Link
               href="/admin/login"
               className="text-[var(--secondary)] hover:underline text-sm active:text-[var(--accent)] border p-2 rounded-full border-border"

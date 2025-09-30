@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -8,6 +9,7 @@ import {
   GraduationCap,
   Calendar,
   XCircle,
+  Linkedin,
 } from "lucide-react";
 
 export default function AdminUsers() {
@@ -20,16 +22,13 @@ export default function AdminUsers() {
       .get("/api/admin/users")
       .then((res) => setUsers(res.data))
       .catch((err) => console.error("Error fetching users", err));
-  }, []);
 
-  useEffect(() => {
     axios
       .get("/api/admin/enrollments")
       .then((res) => setEnrollments(res.data))
       .catch((err) => console.error("Error fetching enrollments", err));
   }, []);
 
-  // Get events a user is enrolled in
   const getUserEvents = (user) => {
     return enrollments
       .filter((enrollment) =>
@@ -41,19 +40,19 @@ export default function AdminUsers() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto md:p-6 p-3 bg-[color:var(--background)] text-[color:var(--foreground)]">
+    <div className="max-w-7xl mx-auto md:p-6 p-4 bg-[color:var(--background)] text-[color:var(--foreground)]">
       {/* Header */}
       <h1 className="md:text-3xl text-2xl font-bold text-center mb-8 text-[color:var(--highlight)]">
-        Registered Students ({users.length})
+        Registered Users ({users.length})
       </h1>
 
-      {/* Search */}
-      <div className="relative mb-8">
+      {/* Search Bar */}
+      <div className="relative mb-8 max-w-md mx-auto">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="🔍 Search by name"
+          placeholder="🔍 Search by name, email..."
           className="w-full px-4 py-2 rounded-xl border border-[color:var(--border)] bg-white/5 backdrop-blur placeholder:text-gray-400 text-sm focus:ring-2 focus:ring-[color:var(--accent)] transition"
         />
         {search && (
@@ -69,8 +68,10 @@ export default function AdminUsers() {
       {/* Users Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {users
-          .filter((user) =>
-            user.name.toLowerCase().includes(search.toLowerCase())
+          .filter(
+            (user) =>
+              user.name.toLowerCase().includes(search.toLowerCase()) ||
+              user.email.toLowerCase().includes(search.toLowerCase())
           )
           .map((user) => {
             const events = getUserEvents(user);
@@ -78,30 +79,60 @@ export default function AdminUsers() {
             return (
               <div
                 key={user._id}
-                className="p-6 border border-[color:var(--border)] rounded-2xl shadow-md bg-[color:var(--card)] backdrop-blur-md hover:shadow-lg hover:scale-[1.01] transition duration-300"
+                className="p-6 border border-[color:var(--border)] rounded-2xl shadow-md bg-[color:var(--card)] backdrop-blur-md hover:shadow-lg hover:scale-[1.02] transition-transform duration-300"
               >
                 {/* User Header */}
                 <div className="flex flex-col items-center mb-4">
-                  <UserCircle className="w-14 h-14 text-[color:var(--accent)] mb-2" />
+                  <UserCircle className="w-16 h-16 text-[color:var(--accent)] mb-2" />
                   <h2 className="text-lg font-semibold text-[color:var(--foreground)] text-center">
                     {user.name}
                   </h2>
+                  <div
+                    className={`inline-block px-3 py-1 rounded-full text-sm font-semibold uppercase ${
+                      user.role === "student"
+                        ? "bg-blue-100 text-blue-700"
+                        : user.role === "alumni"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {user.role}
+                  </div>
                 </div>
 
-                {/* Info */}
+                {/* User Info */}
                 <div className="space-y-2 text-sm border-t border-[color:var(--border)] pt-3">
                   <p className="flex items-center gap-2 text-[color:var(--secondary)]">
                     <Mail className="w-4 h-4 text-[color:var(--highlight)]" />
                     <span>{user.email}</span>
                   </p>
-                  <p className="flex items-center gap-2 text-[color:var(--secondary)]">
-                    <GraduationCap className="w-4 h-4 text-[color:var(--highlight)]" />
-                    <span>{user.college}</span>
-                  </p>
-                  <p className="flex items-center gap-2 text-[color:var(--secondary)]">
-                    <Phone className="w-4 h-4 text-[color:var(--highlight)]" />
-                    <span>{user.phone}</span>
-                  </p>
+                  {user.phone && (
+                    <p className="flex items-center gap-2 text-[color:var(--secondary)]">
+                      <Phone className="w-4 h-4 text-[color:var(--highlight)]" />
+                      <span>{user.phone}</span>
+                    </p>
+                  )}
+                  {(user.college || user.company) && (
+                    <p className="flex items-center gap-2 text-[color:var(--secondary)]">
+                      <GraduationCap className="w-4 h-4 text-[color:var(--highlight)]" />
+                      <span>
+                        {user.role === "student" && user.college}
+                        {user.role === "alumni" &&
+                          `${user.jobTitle} at ${user.company} (${user.batch})`}
+                      </span>
+                    </p>
+                  )}
+                  {user.linkedin && (
+                    <p className="text-xs text-[color:var(--accent)] hover:underline break-all flex items-center justify-center">
+                      <a
+                        href={user.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Linkedin className="w-6 h-6" />
+                      </a>
+                    </p>
+                  )}
                 </div>
 
                 {/* Enrolled Events */}

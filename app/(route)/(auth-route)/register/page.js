@@ -2,35 +2,29 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-  GraduationCap,
-  Mail,
-  Phone,
-  Lock,
-  User,
-  BookOpen,
-  Building,
-  Briefcase,
-  CheckCircle,
-} from "lucide-react";
+import { Key, KeyIcon, Lock, SquareRoundCorner, SquareRoundCornerIcon } from "lucide-react";
+import { FaRegistered } from "react-icons/fa";
+import { MdSystemSecurityUpdateWarning } from "react-icons/md";
 
-export default function RegisterPage() {
+export default function Register() {
   const router = useRouter();
+
   const [form, setForm] = useState({
-    role: "student", // default role
+    role: "student",
     name: "",
     email: "",
+    phone: "",
+    password: "",
     college: "",
     year: "",
     branch: "",
-    phone: "",
-    password: "",
-    company: "",
-    jobTitle: "",
     batch: "",
+    jobTitle: "",
+    company: "",
+    linkedin: "",
   });
+
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -41,10 +35,14 @@ export default function RegisterPage() {
     }
   }, [router]);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const sendOtp = async (e) => {
     e.preventDefault();
+    if (!form.email && !form.phone) return alert("Enter email or phone.");
+
     setLoading(true);
     try {
       const res = await fetch("/api/auth/send-otp", {
@@ -52,15 +50,12 @@ export default function RegisterPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email, phone: form.phone }),
       });
-      const data = res.ok ? await res.json() : {};
-      if (res.ok) {
-        setStep(2);
-      } else {
-        alert(data.message || "Failed to send OTP");
-      }
+      const data = await res.json();
+      if (res.ok) setStep(2);
+      else alert(data.message || "Failed to send OTP.");
     } catch (err) {
       console.error(err);
-      alert("Something went wrong.");
+      alert("Something went wrong sending OTP.");
     } finally {
       setLoading(false);
     }
@@ -68,6 +63,8 @@ export default function RegisterPage() {
 
   const verifyOtp = async (e) => {
     e.preventDefault();
+    if (!otp.trim()) return alert("Enter OTP.");
+
     setLoading(true);
     try {
       const res = await fetch("/api/auth/verify-otp", {
@@ -80,155 +77,192 @@ export default function RegisterPage() {
         localStorage.setItem("student", JSON.stringify(data.student));
         router.push("/dashboard");
       } else {
-        alert(data.message || "OTP verification failed");
+        alert(data.message || "OTP verification failed.");
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong.");
+      alert("Something went wrong verifying OTP.");
     } finally {
       setLoading(false);
     }
   };
 
-  const InputField = ({ name, type, placeholder, icon: Icon }) => (
-    <div className="relative">
-      <Icon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={form[name]}
-        onChange={handleChange}
-        required
-        className="w-full p-3 pl-10 rounded-lg bg-transparent border border-[var(--border)] placeholder:text-sm placeholder:text-gray-400 focus:ring-2 focus:ring-accent focus:outline-none"
-      />
-    </div>
-  );
+  const inputClasses =
+    "w-full px-4 py-3 border border-[color:var(--border)] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent placeholder:text-muted-foreground bg-background text-foreground";
+
+  const buttonClasses =
+    "w-full py-3 bg-accent text-background font-semibold rounded-lg shadow-md hover:bg-accent/90 transition";
+
+  const selectClasses =
+    "w-full px-4 py-3 border border-[color:var(--border)] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent bg-background text-foreground";
 
   return (
-    <main className="min-h-screen pt-12 flex flex-col items-center justify-center px-4 bg-background text-foreground">
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        className="mb-6"
-      >
-        <GraduationCap className="w-16 h-16 text-accent" />
-      </motion.div>
+    <section className="min-h-screen flex flex-col items-center justify-center px-4 bg-background">
+      <div className="w-full max-w-3xl">
+        <h2 className="text-3xl font-bold text-center mb-6 text-accent">
+         <KeyIcon className="w-6 h-6 inline-block" /> Register 
+        </h2>
 
-      {step === 1 && (
-        <motion.form
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          onSubmit={sendOtp}
-          className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 bg-card border border-border rounded-2xl shadow-md"
-        >
-          <h2 className="lg:col-span-2 text-2xl font-bold text-center">🎓 Registration</h2>
-
-          {/* Role Selector */}
-          <div className="lg:col-span-2 flex justify-center gap-4">
-            {["student", "alumni"].map((role) => (
-              <motion.button
-                key={role}
-                type="button"
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setForm({ ...form, role })}
-                className={`px-6 py-2 rounded-full border transition ${
-                  form.role === role
-                    ? "bg-accent text-white border-accent"
-                    : "bg-transparent border-border text-secondary hover:bg-accent/10"
-                }`}
-              >
-                {role === "student" ? "🎓 Student" : "👔 Alumni"}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Left column – Common */}
-          <div className="space-y-4">
-            <InputField name="name" type="text" placeholder="Full Name" icon={User} />
-            <InputField name="email" type="email" placeholder="Email Address" icon={Mail} />
-            <InputField name="phone" type="tel" placeholder="Phone Number" icon={Phone} />
-            <InputField name="password" type="password" placeholder="Password" icon={Lock} />
-          </div>
-
-          {/* Right column – Role-specific */}
-          <div className="space-y-4">
-            {form.role === "student" ? (
-              <>
-                <InputField name="college" type="text" placeholder="College Name" icon={Building} />
-                <InputField name="year" type="text" placeholder="Year (e.g. 2nd Year)" icon={BookOpen} />
-                <InputField name="branch" type="text" placeholder="Branch (e.g. CSE)" icon={BookOpen} />
-              </>
-            ) : (
-              <>
-                <InputField name="company" type="text" placeholder="Company Name" icon={Building} />
-                <InputField name="jobTitle" type="text" placeholder="Job Title" icon={Briefcase} />
-                <InputField name="batch" type="text" placeholder="Batch (e.g. 2018)" icon={GraduationCap} />
-              </>
-            )}
-          </div>
-
-          <div className="lg:col-span-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition flex justify-center items-center"
-            >
-              {loading ? "Sending OTP..." : "Send OTP"}
-            </button>
-          </div>
-        </motion.form>
-      )}
-
-      {step === 2 && (
-        <motion.form
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          onSubmit={verifyOtp}
-          className="w-full max-w-md p-6 space-y-4 bg-card border border-border rounded-2xl shadow-md"
-        >
-          <h2 className="text-xl font-bold text-center">🔐 Verify OTP</h2>
-          <p className="text-sm text-center text-gray-500">
-            Enter the OTP sent to <b>{form.email || form.phone}</b>
-          </p>
-          <div className="relative">
-            <CheckCircle className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+        {/* Step 1: Form */}
+        {step === 1 && (
+          <form
+            onSubmit={sendOtp}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-8 bg-card rounded-3xl shadow-lg border border-[color:var(--border)]"
+          >
             <input
               type="text"
-              name="otp"
+              name="name"
+              placeholder="Full Name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              className={inputClasses}
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              className={inputClasses}
+            />
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone"
+              value={form.phone}
+              onChange={handleChange}
+              className={inputClasses}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              className={inputClasses}
+            />
+
+            <select
+              name="role"
+              value={form.role}
+              onChange={handleChange}
+              className={selectClasses}
+            >
+              <option value="student">Student</option>
+              <option value="alumni">Alumni</option>
+            </select>
+
+            {form.role === "student" && (
+              <>
+                <input
+                  type="text"
+                  name="college"
+                  placeholder="College"
+                  value={form.college}
+                  onChange={handleChange}
+                  className={inputClasses}
+                />
+                <input
+                  type="text"
+                  name="year"
+                  placeholder="Year"
+                  value={form.year}
+                  onChange={handleChange}
+                  className={inputClasses}
+                />
+                <input
+                  type="text"
+                  name="branch"
+                  placeholder="Branch"
+                  value={form.branch}
+                  onChange={handleChange}
+                  className={inputClasses}
+                />
+              </>
+            )}
+
+            {form.role === "alumni" && (
+              <>
+                <input
+                  type="text"
+                  name="batch"
+                  placeholder="Batch"
+                  value={form.batch}
+                  onChange={handleChange}
+                  className={inputClasses}
+                />
+                <input
+                  type="text"
+                  name="jobTitle"
+                  placeholder="Job Title"
+                  value={form.jobTitle}
+                  onChange={handleChange}
+                  className={inputClasses}
+                />
+                <input
+                  type="text"
+                  name="company"
+                  placeholder="Company"
+                  value={form.company}
+                  onChange={handleChange}
+                  className={inputClasses}
+                />
+                <input
+                  type="text"
+                  name="linkedin"
+                  placeholder="LinkedIn URL"
+                  value={form.linkedin}
+                  onChange={handleChange}
+                  className={inputClasses}
+                />
+              </>
+            )}
+
+            <button type="submit" disabled={loading} className={buttonClasses}>
+              {loading ? "⏳ Sending OTP..." : "Send OTP"}
+            </button>
+          </form>
+        )}
+
+        {/* Step 2: OTP */}
+        {step === 2 && (
+          <form
+            onSubmit={verifyOtp}
+            className="flex flex-col gap-4 w-full p-6 bg-card rounded-3xl shadow-lg"
+          >
+            <h2 className="text-2xl font-bold text-center mb-4 text-accent">
+              Verify OTP
+            </h2>
+            <input
+              type="text"
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               required
-              className="w-full p-3 pl-10 rounded-lg bg-transparent border border-border placeholder:text-sm placeholder:text-gray-400 focus:ring-2 focus:ring-green-500 focus:outline-none"
+              className={inputClasses}
             />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition"
-          >
-            {loading ? "Verifying..." : "Verify & Register"}
-          </button>
-        </motion.form>
-      )}
+            <button type="submit" disabled={loading} className={buttonClasses}>
+              {loading ? "⏳ Verifying..." : "Verify & Register"}
+            </button>
+          </form>
+        )}
 
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="mt-6 flex flex-col items-center gap-2 text-sm"
-      >
-        <Link href="/login" className="text-secondary hover:underline active:text-accent">
-          Already registered? Login here →
-        </Link>
-        <Link href="/reset-password" className="text-secondary hover:underline active:text-accent">
-          Forgot password?
-        </Link>
-      </motion.div>
-    </main>
+        <p className="text-center mt-6 text-sm text-secondary">
+          Already have an account?{" "}
+          <Link href="/login" className="text-accent hover:underline">
+            Login
+          </Link>
+        </p>
+
+        <p className="text-center mt-2 text-sm text-secondary">
+          Forgot your password?{" "}
+          <Link href="/reset-password" className="text-accent hover:underline">
+            Reset here{" "}
+          </Link>
+        </p>
+      </div>
+    </section>
   );
 }
