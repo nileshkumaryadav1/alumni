@@ -10,6 +10,7 @@ export default function DashboardPage() {
   const [student, setStudent] = useState(null);
   const [events, setEvents] = useState([]);
   const router = useRouter();
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const stored = localStorage.getItem("student");
@@ -17,6 +18,27 @@ export default function DashboardPage() {
       router.push("/login");
       return;
     }
+
+    const student = JSON.parse(stored);
+
+    // ✅ Validate student against DB
+    fetch("/api/admin/users")
+      .then((res) => res.json())
+      .then((data) => {
+        const exists = data.some((u) => u.email === student.email);
+
+        if (exists) {
+          setUsers(data);
+        } else {
+          // ❌ Student not in DB → logout
+          localStorage.removeItem("student");
+          router.push("/login");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching users", err);
+        setUsers([]);
+      });
 
     try {
       const parsed = JSON.parse(stored);
@@ -73,7 +95,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-8 pt-12 sm:px-8 md:px-12 bg-[var(--background)] text-[var(--foreground)]">
+    <main className="min-h-screen px-4 py-8 sm:px-8 md:px-12 bg-[var(--background)] text-[var(--foreground)]">
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Header */}
         <div className="p-6 sm:p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/20 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-6">

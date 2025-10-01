@@ -30,13 +30,13 @@ export default function AdminPage() {
         {/* Info Note */}
         <p className="text-sm text-[color:var(--secondary)] border-t border-[color:var(--border)] pt-4 italic">
           All navigation is available in the left sidebar / menu{" "}
-          <button
+          {/* <button
             // onClick={}
             className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-[color:var(--foreground)] hover:text-white bg-[color:var(--background)] hover:bg-[var(--accent)] backdrop-blur-lg border border-[color:var(--border)] shadow-md transition-all duration-200 active:scale-95 w-full"
           >
             <Menu className="w-4 h-4" />
             <span>Menu</span>
-          </button>
+          </button> */}
         </p>
 
         <p>OR</p>

@@ -1,9 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Mail, KeyRound, CheckCircle2, Loader2 } from "lucide-react";
+import {
+  Mail,
+  KeyRound,
+  CheckCircle2,
+  Loader2,
+  Key,
+  KeyRoundIcon,
+  KeySquareIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function ResetPasswordPage() {
@@ -16,6 +24,12 @@ export default function ResetPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("student")) {
+      router.push("/dashboard");
+    }
+  });
 
   // Step 1: Request OTP
   const handleGetOTP = async () => {
@@ -164,7 +178,8 @@ export default function ResetPasswordPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
               className="mt-6 flex flex-col gap-2 text-center"
-            > <div className="flex justify-between w-full">
+            >
+              <div className="flex justify-between w-full">
                 <Link
                   href="/login"
                   className="text-[var(--secondary)] hover:underline text-sm active:text-[var(--accent)]  border p-2 rounded-full border-border w-50"
@@ -184,7 +199,6 @@ export default function ResetPasswordPage() {
               >
                 Don&apos;t have an account? Register here.
               </Link>
-             
             </motion.div>
           </>
         )}
@@ -192,27 +206,45 @@ export default function ResetPasswordPage() {
         {/* Step 2: OTP + password fields */}
         {step === 2 && (
           <>
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-accent focus:outline-none"
-            />
-            <input
-              type="password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-accent focus:outline-none"
-            />
-            <input
-              type="password"
-              placeholder="Confirm New Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full p-3 mb-4 border rounded-lg focus:ring-2 focus:ring-accent focus:outline-none"
-            />
+            <label className="block text-center">
+              Enter OTP
+              <Key className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
+            </label>
+            <div className="relative mb-1">
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-accent focus:outline-none"
+              />
+            </div>
+            <label className="block text-center">
+              Enter New Password
+              <KeyRoundIcon className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
+            </label>
+            <div className="relative mb-1">
+              <input
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-accent focus:outline-none"
+              />
+            </div>
+            <label className="block text-center">
+              Confirm New Password
+              <KeyRoundIcon className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
+            </label>
+            <div className="relative mb-4">
+              <input
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-accent focus:outline-none"
+              />
+            </div>
             <button
               onClick={handleResetPassword}
               disabled={loading}

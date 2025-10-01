@@ -25,7 +25,7 @@ const adminLinks = [
   { name: "Dashboard", href: "/admin", icon: User },
   { name: "Add New Event", href: "/admin/homepage", icon: Pencil },
   { name: "Manage Events", href: "/admin/events", icon: LayoutDashboard },
-  { name: "Registered Students", href: "/admin/users", icon: Users },
+  { name: "Manage Students", href: "/admin/users", icon: Users },
   { name: "Settings", href: "/admin/settings", icon: Settings },
   { name: "Bulk Mail", href: "/admin/bulk-mail", icon: Mail },
 ];

@@ -38,3 +38,18 @@ export async function GET() {
 
   return NextResponse.json(enrichedStudents);
 }
+
+export async function DELETE(req) {
+  const { email } = await req.json();
+  await connectDB();
+
+  const deleted = await Student.findOneAndDelete({ email });
+  if (!deleted) {
+    return NextResponse.json({ error: "Student not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({
+    success: true,
+    message: "Student deleted successfully",
+  });
+}

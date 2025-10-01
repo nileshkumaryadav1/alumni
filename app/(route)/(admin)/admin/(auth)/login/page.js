@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
         className="mb-6 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[var(--foreground)]/5 hover:bg-[var(--foreground)]/10 text-[var(--foreground)]/80 hover:text-[var(--foreground)] border border-[var(--border)] shadow transition-all active:scale-95"
       >
         <Home className="w-4 h-4" />
-        <span>User Home</span>
+        <span>Move to User side Home</span>
       </Link>
 
       {/* Card */}

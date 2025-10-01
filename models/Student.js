@@ -19,6 +19,14 @@ const studentSchema = new mongoose.Schema(
     // Fest Details
     festId: {
       type: String,
+      // required: true,
+      unique: true,
+      uppercase: true,
+      trim: true,
+    },
+
+    uniqueId: {
+      type: String,
       required: true,
       unique: true,
       uppercase: true,

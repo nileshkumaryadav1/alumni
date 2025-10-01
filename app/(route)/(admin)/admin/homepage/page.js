@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function AdminHomePage() {
+export default function AddEventPage() {
   const [data, setData] = useState({ events: [], sponsors: [] });
   const [events, setEvents] = useState(data.events);
   const [sponsors, setSponsors] = useState(data.sponsors);
@@ -138,7 +138,7 @@ export default function AdminHomePage() {
         <h2 className="text-xl md:text-2xl font-bold text-center mb-6 flex items-center justify-center gap-2 text-[color:var(--foreground)]">
           📅 Manage Events
           <span className="text-sm font-normal text-[color:var(--secondary)]">
-            ({data.events.length})
+            {/* ({data.events.length}) */}
           </span>
         </h2>
 
@@ -308,6 +308,9 @@ export default function AdminHomePage() {
                 {s.email && <p>📧 {s.email}</p>}
                 {s.company && <p>👤 {s.name}</p>}
                 {s.phone && <p>📞 {s.phone}</p>}
+                from{s.from} to {s.to} days
+                {s.website}
+                {s.message}
               </div>
 
               {/* Sponsor Message */}
@@ -333,11 +336,14 @@ export default function AdminHomePage() {
         {/* Sponsor Input Form */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8">
           {renderInput("Sponsor Name", "name", newSponsor.name, setNewSponsor)}
-          {renderInput("Image URL", "image", newSponsor.image, setNewSponsor)}
+          {renderInput("Phone", "phone", newSponsor.phone, setNewSponsor)}
           {renderInput("Email", "email", newSponsor.email, setNewSponsor)}
           {renderInput("Company", "company", newSponsor.company, setNewSponsor)}
-          {renderInput("Phone", "phone", newSponsor.phone, setNewSponsor)}
+          {renderInput("Website", "website", newSponsor.website, setNewSponsor)}
+          {renderInput("Image URL", "image", newSponsor.image, setNewSponsor)}
           {renderInput("Message", "message", newSponsor.message, setNewSponsor)}
+          {renderInput("From", "from", newSponsor.from, setNewSponsor)}
+          {renderInput("To", "to", newSponsor.to, setNewSponsor)}
         </div>
 
         {/* Sponsor Image Preview */}

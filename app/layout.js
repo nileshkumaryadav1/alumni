@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navigation/Navbar";
+import ClientWrapper from "./client-wrapper";
+import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,8 +37,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "Alumni Management System | Connecting Graduates & Building Futures",
+    title: "Alumni Management System | Connecting Graduates & Building Futures",
     description:
       "A centralized alumni management platform for networking, mentorship, events, and career opportunities.",
     image: "/logo.png",
@@ -46,12 +46,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+    >
+      <body>
+        <SessionProviderWrapper>
+          {/* Only wrap interactive components in ClientWrapper */}
+          <ClientWrapper>{children}</ClientWrapper>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

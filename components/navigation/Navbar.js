@@ -18,7 +18,7 @@ import {
   FaUser,
   FaUsers,
 } from "react-icons/fa";
-import { MdDashboard, MdPerson } from "react-icons/md";
+import { MdPerson } from "react-icons/md";
 
 const navLinks = [
   {
@@ -29,7 +29,7 @@ const navLinks = [
   {
     href: "/alumni",
     label: "Alumni",
-    icon: <MdPerson className="text-[color:var(--accent)]" />,
+    icon: <PersonStandingIcon className="text-[color:var(--accent)]" />,
   },
   {
     label: "Events",
@@ -41,6 +41,11 @@ const navLinks = [
         icon: <FaListAlt className="text-sm" />,
       },
       {
+        href: "/events/registered",
+        label: "Regd Events/Workshop",
+        icon: <FaUsers className="text-sm" />,
+      },
+      {
         href: "/events/upcoming/events",
         label: "Upcoming Events",
         icon: <FaClock className="text-sm" />,
@@ -50,22 +55,12 @@ const navLinks = [
         label: "Past Events",
         icon: <FaHistory className="text-sm" />,
       },
-      {
-        href: "/events/registered",
-        label: "Regd Events/Workshop",
-        icon: <FaUsers className="text-sm" />,
-      },
-      {
-        href: "/schedule",
-        label: "Schedule",
-        icon: <FaCalendarAlt className="text-sm" />,
-      },
     ],
   },
   {
     href: "/dashboard",
     label: "Dashboard",
-    icon: <MdDashboard className="text-[color:var(--accent)]" />,
+    icon: <MdPerson className="text-[color:var(--accent)]" />,
   },
   {
     label: "Management",
@@ -83,7 +78,7 @@ const navLinks = [
       },
       {
         href: "/about",
-        label: "About Alumni",
+        label: "About System",
         icon: <FaInfoCircle className="text-sm" />,
       },
       {

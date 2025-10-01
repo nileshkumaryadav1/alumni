@@ -1,8 +1,8 @@
 import connectDB from "@/utils/db";
 import Event from "@/models/Event";
-// import Sponsor from "@/models/Sponsor";
+import Sponsor from "@/models/Sponsor";
 import { NextResponse } from "next/server";
-// import Enrollment from "@/models/Enrollment";
+import Enrollment from "@/models/Enrollment";
 
 // 📌 CONNECT TO DATABASE
 connectDB();
@@ -72,29 +72,3 @@ export async function DELETE(req) {
     return NextResponse.json({ error: "Failed to delete data" }, { status: 500 });
   }
 }
-
-// for de register the enrollred student
-// export async function DELETE(req) {
-//   await connectDB();
-
-//   const { category, id } = await req.json();
-
-//   try {
-//     if (category === "events") {
-//       // 1. Delete the event
-//       await Event.findByIdAndDelete(id);
-
-//       // 2. Also delete all enrollments for this event
-//       await Enrollment.deleteMany({ eventId: id });
-//     }
-
-//     if (category === "sponsors") {
-//       // your sponsor deletion logic...
-//     }
-
-//     return new Response(JSON.stringify({ success: true }), { status: 200 });
-//   } catch (err) {
-//     console.error("DELETE error:", err);
-//     return new Response(JSON.stringify({ error: "Delete failed" }), { status: 500 });
-//   }
-// }

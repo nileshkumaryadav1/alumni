@@ -10,9 +10,11 @@ import {
   Calendar,
   XCircle,
   Linkedin,
+  IdCard,
+  IdCardIcon,
 } from "lucide-react";
 
-export default function AdminUsers() {
+export default function AdminAllUsers() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [enrollments, setEnrollments] = useState([]);
@@ -37,6 +39,20 @@ export default function AdminUsers() {
         )
       )
       .map((enrollment) => enrollment.eventDetails?.name || "Unnamed Event");
+  };
+
+  const handleDelete = async (email) => {
+    if (!confirm(`Are you sure you want to delete ${email}?`)) return;
+
+    try {
+      await axios.delete("/api/admin/users", { data: { email } });
+      // Remove deleted user from state
+      setUsers((prev) => prev.filter((u) => u.email !== email));
+      alert("User deleted successfully");
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      alert("Failed to delete user");
+    }
   };
 
   return (
@@ -112,6 +128,18 @@ export default function AdminUsers() {
                       <span>{user.phone}</span>
                     </p>
                   )}
+                  {user.uniqueId && (
+                    <p className="flex items-center gap-2 text-[color:var(--secondary)]">
+                      <IdCard className="w-4 h-4 text-[color:var(--highlight)]" />
+                      <span>uniqueId: {user.uniqueId}</span>
+                    </p>
+                  )}
+                  {user.festId && (
+                    <p className="flex items-center gap-2 text-[color:var(--secondary)]">
+                      <IdCardIcon className="w-4 h-4 text-[color:var(--highlight)]" />
+                      <span>festId: {user.festId}</span>
+                    </p>
+                  )}
                   {(user.college || user.company) && (
                     <p className="flex items-center gap-2 text-[color:var(--secondary)]">
                       <GraduationCap className="w-4 h-4 text-[color:var(--highlight)]" />
@@ -158,6 +186,14 @@ export default function AdminUsers() {
                     </p>
                   )}
                 </div>
+
+                {/* Delete user btn */}
+                <button
+                  onClick={() => handleDelete(user.email)}
+                  className="mt-4 w-full px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition cursor-pointer"
+                >
+                  Delete User
+                </button>
               </div>
             );
           })}
