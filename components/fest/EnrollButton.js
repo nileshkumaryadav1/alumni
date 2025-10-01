@@ -22,7 +22,7 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [teamName, setTeamName] = useState("");
-  const [members, setMembers] = useState([""]); // festIds entered by leader
+  const [members, setMembers] = useState([""]); // uniqueIds entered by leader
 
   useEffect(() => {
     const storedStudent = localStorage.getItem("student");
@@ -71,7 +71,7 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
 
   // -------------------- Team Enroll --------------------
   const handleTeamEnroll = async () => {
-    if (!student?._id || !student?.festId) {
+    if (!student?._id || !student?.uniqueId) {
       alert("Please login to enroll in this event.");
       router.push("/login");
       return;
@@ -99,7 +99,7 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
           eventId,
           registeredBy: student._id, // DB id of leader
           teamName,
-          participants: filteredMembers, // ✅ only festIds of members
+          participants: filteredMembers, // ✅ only uniqueIds of members
         }),
       });
 
@@ -177,7 +177,7 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
               className="w-full border p-2 rounded mb-4"
             />
 
-            {/* Member festId inputs */}
+            {/* Member uniqueId inputs */}
             <div className="space-y-2">
               {members.map((member, idx) => (
                 <input

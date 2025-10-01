@@ -7,11 +7,10 @@ import Link from "next/link";
 import {
   GraduationCap,
   Users,
-  Building,
   ArrowRight,
-  Network,
   Calendar,
   User,
+  Briefcase,
 } from "lucide-react";
 import FloatingEventsPageButton from "@/components/custom/myself/FloatingEventsPageButton";
 
@@ -19,8 +18,9 @@ export default function HomePage() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [studentData, setStudentData] = useState({});
+  const [events, setEvents] = useState([]);
 
-  // Check localStorage for student
+  // ✅ Check login + fetch events
   useEffect(() => {
     if (typeof window !== "undefined") {
       const student = localStorage.getItem("student");
@@ -31,78 +31,104 @@ export default function HomePage() {
     }
   }, []);
 
-  // Logged-in dashboard
+  useEffect(() => {
+    fetch("/api/homepage")
+      .then((res) => res.json())
+      .then((data) => setEvents(data.events));
+  });
+
+  // --------------------------
+  // ✅ Logged-in dashboard
+  // --------------------------
   if (isLoggedIn) {
     return (
       <section className="min-h-screen bg-background text-foreground flex flex-col pt-12">
-        <div className="flex flex-1 p-6 gap-6 max-xl:flex-col">
+<h1 className="text-center font-bold text-2xl">Our System</h1>
+
+        <div className="p-6 gap-6 space-y-6 md:flex">
           {/* Sidebar */}
-          <aside className="w-72 flex-shrink-0 bg-card rounded-2xl p-5 shadow-md flex flex-col gap-6">
-            <div className="flex flex-col items-center gap-3 border-b pb-4">
-              <User className="w-16 h-16 text-accent" />
-              <h2 className="font-bold text-lg">{studentData.name}</h2>
-              <p className="text-sm text-secondary capitalize">{studentData.role}</p>
+          <aside className="w-72 flex-shrink-0 bg-card rounded-3xl p-6 shadow-xl flex flex-col gap-8">
+            {/* Profile Section */}
+            <div className="flex flex-col items-center gap-3 border-b border-gray-200 pb-6">
+              <div className="w-20 h-20 bg-gradient-to-tr from-accent/30 to-accent/10 rounded-full flex items-center justify-center shadow-md">
+                <User className="w-10 h-10 text-accent" />
+              </div>
+              <h2 className="font-bold text-lg text-foreground">
+                {studentData.name}
+              </h2>
+              <p className="text-sm text-accent capitalize">
+                {studentData.role}
+              </p>
+              {studentData.college && (
+                <p className="text-xs text-muted-foreground">
+                  {studentData.college}
+                </p>
+              )}
             </div>
 
-            <div className="flex flex-col gap-2 mt-4">
+            {/* Links Section */}
+            <div className="flex flex-col gap-3">
               {studentData.role === "admin" && (
                 <>
                   <Link
                     href="/admin/events"
-                    className="text-accent hover:bg-accent/10 px-3 py-2 rounded-lg transition"
+                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
                   >
-                    Manage Events
+                    📅 Manage Events
                   </Link>
                   <Link
                     href="/admin/users"
-                    className="text-accent hover:bg-accent/10 px-3 py-2 rounded-lg transition"
+                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
                   >
-                    Manage Users
+                    👥 Manage Users
                   </Link>
                 </>
               )}
-
               {studentData.role === "student" && (
                 <>
                   <Link
                     href="/dashboard/events"
-                    className="text-accent hover:bg-accent/10 px-3 py-2 rounded-lg transition"
+                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
                   >
-                    My Enrollments
+                    🎟 My Enrollments
                   </Link>
                   <Link
                     href="/dashboard/mentors"
-                    className="text-accent hover:bg-accent/10 px-3 py-2 rounded-lg transition"
+                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
                   >
-                    Find Mentors
+                    🧑‍🏫 Find Mentors
                   </Link>
                 </>
               )}
-
               {studentData.role === "alumni" && (
                 <>
                   <Link
                     href="/dashboard/network"
-                    className="text-accent hover:bg-accent/10 px-3 py-2 rounded-lg transition"
+                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
                   >
-                    My Network
+                    🌐 My Network
                   </Link>
                   <Link
                     href="/dashboard/mentorship"
-                    className="text-accent hover:bg-accent/10 px-3 py-2 rounded-lg transition"
+                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
                   >
-                    Offer Mentorship
+                    🤝 Offer Mentorship
                   </Link>
                 </>
               )}
             </div>
 
-            <div className="mt-auto text-sm text-secondary px-2">
-              Welcome back! Explore your dashboard and stay connected.
+            {/* Footer / Greeting */}
+            <div className="mt-auto text-sm text-secondary px-2 bg-gradient-to-r from-accent/5 to-accent/10 rounded-xl py-2 text-center shadow-inner">
+              👋 Welcome back,{" "}
+              <span className="font-semibold text-accent">
+                {studentData.name?.split(" ")[0]}
+              </span>
+              ! Keep connecting and growing.
             </div>
           </aside>
 
-          {/* Feed / Main Content */}
+          {/* Main Feed */}
           <main className="flex-1 flex flex-col gap-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -110,30 +136,40 @@ export default function HomePage() {
               transition={{ duration: 0.6 }}
               className="flex flex-col gap-4"
             >
-              <h2 className="text-2xl font-bold">Your Feed</h2>
+              <h2 className="text-2xl font-bold">Latest Updates</h2>
 
-              {/* Example feed card */}
+              {/* Events Feed */}
+              {events.map((ev) => (
+                <motion.div
+                  key={ev.id}
+                  className="bg-card p-5 rounded-2xl shadow-md hover:shadow-xl transition"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <Calendar className="w-6 h-6 text-accent" />
+                    <h3 className="font-semibold">{ev.title}</h3>
+                  </div>
+                  <p className="text-sm text-secondary">📅 {ev.date}</p>
+                </motion.div>
+              ))}
+
+              {/* Alumni Post Example */}
               <motion.div
-                className="bg-card p-5 rounded-2xl shadow-md hover:shadow-xl transition cursor-pointer"
+                className="bg-card p-5 rounded-2xl shadow-md hover:shadow-xl transition"
                 whileHover={{ scale: 1.02 }}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <User className="w-8 h-8 text-accent" />
-                  <div>
-                    <h3 className="font-semibold">{studentData.name}</h3>
-                    <p className="text-sm text-secondary">{studentData.role}</p>
-                  </div>
+                  <Briefcase className="w-6 h-6 text-accent" />
+                  <h3 className="font-semibold">Career Tips from Alumni</h3>
                 </div>
                 <p className="text-sm text-foreground">
-                  Welcome to your personalized dashboard! Here you can see updates, upcoming events, and connect with your peers.
+                  “Networking opens doors! Don’t hesitate to reach out to alumni
+                  working in your dream company.”
                 </p>
-                <div className="flex items-center gap-4 mt-3 text-sm text-accent">
-                  <Calendar className="w-5 h-5" />
-                  Upcoming Event: Hackathon 2025
-                </div>
+                <p className="text-xs text-secondary mt-2">
+                  — Anjali Gupta, Batch 2018, Google
+                </p>
               </motion.div>
-
-              {/* More feed cards can go here */}
             </motion.div>
           </main>
         </div>
@@ -141,96 +177,62 @@ export default function HomePage() {
     );
   }
 
-  // Not logged in → landing page
+  // --------------------------
+  // ✅ Landing Page (not logged in)
+  // --------------------------
   return (
     <section className="relative flex min-h-screen py-16 flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-background via-background/80 to-background text-foreground">
       <FloatingEventsPageButton />
 
-      {/* Logo/Icon */}
+      {/* Logo */}
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        className="mb-8 flex items-center justify-center"
+        className="mb-8"
       >
         <GraduationCap className="w-20 h-20 text-accent drop-shadow-lg" />
       </motion.div>
 
       {/* Title */}
-      <motion.h1
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl sm:text-6xl font-extrabold tracking-tight"
-      >
-        Alumni & Student <span className="text-accent">Relations</span>
+      <motion.h1 className="text-4xl sm:text-6xl font-extrabold">
+        Connect <span className="text-accent">Alumni</span> & Empower{" "}
+        <span className="text-accent">Students</span>
       </motion.h1>
 
       {/* Subtitle */}
-      <motion.p
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        className="mt-4 text-lg sm:text-xl text-secondary max-w-2xl"
-      >
-        A centralized platform to connect alumni, empower students, and strengthen the bond with your college community.
+      <motion.p className="mt-4 text-lg sm:text-xl text-secondary max-w-2xl">
+        Join a thriving community of learners and leaders. Build networks, find
+        mentors, and shape opportunities together.
       </motion.p>
 
-      {/* Feature Highlights */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.8 }}
-        className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl w-full"
-      >
-        <div className="flex flex-col items-center gap-3 rounded-2xl bg-card p-6 shadow-md hover:shadow-xl transition">
-          <Users className="w-10 h-10 text-accent" />
-          <h3 className="text-lg font-semibold">Alumni Network</h3>
+      {/* Metrics */}
+      <div className="mt-10 grid grid-cols-3 gap-8 text-center">
+        <div>
+          <h2 className="text-3xl font-bold text-accent">5000+</h2>
+          <p className="text-sm text-muted-foreground">Active Alumni</p>
+        </div>
+        <div>
+          <h2 className="text-3xl font-bold text-accent">100+</h2>
           <p className="text-sm text-muted-foreground">
-            Discover and connect with alumni across batches and industries.
+            Mentors Offering Guidance
           </p>
         </div>
-
-        <div className="flex flex-col items-center gap-3 rounded-2xl bg-card p-6 shadow-md hover:shadow-xl transition">
-          <Building className="w-10 h-10 text-accent" />
-          <h3 className="text-lg font-semibold">College Connect</h3>
-          <p className="text-sm text-muted-foreground">
-            Stay updated with campus events and contribute to initiatives.
-          </p>
+        <div>
+          <h2 className="text-3xl font-bold text-accent">50+</h2>
+          <p className="text-sm text-muted-foreground">Annual Events</p>
         </div>
+      </div>
 
-        <div className="flex flex-col items-center gap-3 rounded-2xl bg-card p-6 shadow-md hover:shadow-xl transition">
-          <Network className="w-10 h-10 text-accent" />
-          <h3 className="text-lg font-semibold">Student Mentorship</h3>
-          <p className="text-sm text-muted-foreground">
-            Guide students in career, internships, and networking opportunities.
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Call to Action Buttons */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.6 }}
-        className="mt-12 flex flex-wrap justify-center gap-4"
-      >
-        <Link
-          href="/alumni"
-          className="inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-lg font-semibold text-background shadow-lg transition-transform hover:scale-105 hover:shadow-xl"
-        >
-          <Users className="w-5 h-5" />
-          Explore Alumni
+      {/* CTA */}
+      <div className="mt-12 flex flex-wrap justify-center gap-4">
+        <Link href="/alumni" className="btn-primary">
+          <Users className="w-5 h-5" /> Explore Alumni
         </Link>
-
-        <Link
-          href="/register"
-          className="inline-flex items-center gap-2 rounded-xl border-2 border-accent px-6 py-3 text-lg font-semibold text-accent transition-transform hover:scale-105 hover:bg-accent hover:text-background"
-        >
-          Get Started
-          <ArrowRight className="w-5 h-5" />
+        <Link href="/register" className="btn-outline">
+          Get Started <ArrowRight className="w-5 h-5" />
         </Link>
-      </motion.div>
+      </div>
     </section>
   );
 }

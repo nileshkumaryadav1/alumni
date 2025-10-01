@@ -3,7 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Key, KeyIcon, Lock, SquareRoundCorner, SquareRoundCornerIcon } from "lucide-react";
+import {
+  Key,
+  KeyIcon,
+  Lock,
+  SquareRoundCorner,
+  SquareRoundCornerIcon,
+} from "lucide-react";
 import { FaRegistered } from "react-icons/fa";
 import { MdSystemSecurityUpdateWarning } from "react-icons/md";
 
@@ -100,7 +106,7 @@ export default function Register() {
     <section className="min-h-screen flex flex-col items-center justify-center px-4 bg-background">
       <div className="w-full max-w-3xl">
         <h2 className="text-3xl font-bold text-center mb-6 text-accent">
-         <KeyIcon className="w-6 h-6 inline-block" /> Register 
+          <KeyIcon className="w-6 h-6 inline-block" /> Register
         </h2>
 
         {/* Step 1: Form */}
@@ -230,7 +236,7 @@ export default function Register() {
         {step === 2 && (
           <form
             onSubmit={verifyOtp}
-            className="flex flex-col gap-4 w-full p-6 bg-card rounded-3xl shadow-lg"
+            className="flex flex-col gap-4 p-6 bg-card rounded-3xl shadow-lg max-w-2xl border border-[color:var(--border)]"
           >
             <h2 className="text-2xl font-bold text-center mb-4 text-accent">
               Verify OTP
@@ -245,6 +251,15 @@ export default function Register() {
             />
             <button type="submit" disabled={loading} className={buttonClasses}>
               {loading ? "⏳ Verifying..." : "Verify & Register"}
+            </button>
+            {/* Resend OTP */}
+            <button
+              type="button"
+              onClick={sendOtp}
+              disabled={loading}
+              className="mt-2 w-full py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition cursor-pointer"
+            >
+              {loading ? "⏳ Processing..." : "Resend OTP"}
             </button>
           </form>
         )}

@@ -38,31 +38,31 @@ export async function POST(req) {
 
     // console.log("Incoming participants:", participants);
 
-    // ✅ Separate festIds vs objectIds
-    const festIds = participants?.filter((p) => typeof p === "string") || [];
+    // ✅ Separate uniqueIds vs objectIds
+    const uniqueIds = participants?.filter((p) => typeof p === "string") || [];
     const objectIds =
       participants?.map((p) => toObjectId(p)).filter((id) => id !== null) || [];
 
     let participantDocs = [];
 
-    if (festIds.length || objectIds.length) {
+    if (uniqueIds.length || objectIds.length) {
       const result = await Student.find({
         $or: [
-          festIds.length ? { festId: { $in: festIds } } : {},
+          uniqueIds.length ? { uniqueId: { $in: uniqueIds } } : {},
           objectIds.length ? { _id: { $in: objectIds } } : {},
         ],
-      }).select("_id festId name email");
+      }).select("_id uniqueId name email");
 
       // console.log("Found students:", result);
 
       // ✅ Filter only the participants entered
-      const found = result.filter((s) => festIds.includes(s.festId));
+      const found = result.filter((s) => uniqueIds.includes(s.uniqueId));
 
       // console.log("Filtered students:", found);
 
       participantDocs = found.map((s) => ({
         studentId: s._id,
-        festId: s.festId,
+        uniqueId: s.uniqueId,
         name: s.name,
         email: s.email,
       }));
@@ -70,7 +70,7 @@ export async function POST(req) {
 
     // ✅ Always add leader
     const leader = await Student.findById(registeredBy).select(
-      "_id festId name email"
+      "_id uniqueId name email"
     );
     if (
       leader &&
@@ -78,7 +78,7 @@ export async function POST(req) {
     ) {
       participantDocs.push({
         studentId: leader._id,
-        festId: leader.festId,
+        uniqueId: leader.uniqueId,
         name: leader.name,
         email: leader.email,
       });

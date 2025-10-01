@@ -134,12 +134,6 @@ export default function AdminAllUsers() {
                       <span>uniqueId: {user.uniqueId}</span>
                     </p>
                   )}
-                  {user.festId && (
-                    <p className="flex items-center gap-2 text-[color:var(--secondary)]">
-                      <IdCardIcon className="w-4 h-4 text-[color:var(--highlight)]" />
-                      <span>festId: {user.festId}</span>
-                    </p>
-                  )}
                   {(user.college || user.company) && (
                     <p className="flex items-center gap-2 text-[color:var(--secondary)]">
                       <GraduationCap className="w-4 h-4 text-[color:var(--highlight)]" />

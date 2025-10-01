@@ -8,7 +8,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { QRCodeSVG } from "qrcode.react";
 
-export default function FestIdCardPage() {
+export default function IdCardPage() {
   const [student, setStudent] = useState(null);
   const cardRef = useRef(null);
 
@@ -25,7 +25,7 @@ export default function FestIdCardPage() {
     }
   }, []);
 
-  const festId = student?.festId || "N/A";
+  const uniqueId = student?.uniqueId || "N/A";
   const name = student?.name || "Participant Name";
   const college = student?.college || "Your College";
   const role = student?.role || "Participant";
@@ -36,7 +36,7 @@ export default function FestIdCardPage() {
   const { name: festName, venue: festVenue, sponsors } = FestData;
   const { name: collegeName, address: collegeAddress, logo: collegeLogo } = CollegeData;
 
-  const qrData = JSON.stringify({ festId, name, college, event: eventName });
+  const qrData = JSON.stringify({ uniqueId, name, college, event: eventName });
 
   const downloadPDF = async () => {
     if (!cardRef.current) return;
@@ -74,7 +74,7 @@ export default function FestIdCardPage() {
       const pdfHeight = 54 - 2 * margin;
 
       pdf.addImage(imgData, "PNG", margin, margin, pdfWidth, pdfHeight);
-      pdf.save(`FestID_${festId}.pdf`);
+      pdf.save(`UniqueID_${uniqueId}.pdf`);
     } catch (err) {
       console.error("PDF generation failed", err);
     }
@@ -114,7 +114,7 @@ export default function FestIdCardPage() {
 
           <div className="flex-1 flex flex-col justify-center text-[9px] leading-snug">
             <p className="text-[8px] text-[#6b7280] font-medium">FEST ID</p>
-            <h1 className="text-lg font-extrabold text-[#00CFFF] tracking-wide">{festId}</h1>
+            <h1 className="text-lg font-extrabold text-[#00CFFF] tracking-wide">{uniqueId}</h1>
             <p className="font-semibold text-[12px]">{name}</p>
             <p className="text-[8.5px] text-[#4b5563]">{college}</p>
             <p className="text-[9px] text-[#001F3F] font-bold uppercase mt-1">{role}</p>

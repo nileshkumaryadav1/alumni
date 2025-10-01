@@ -31,16 +31,6 @@ function safeStudentObject(studentDoc) {
   delete obj.password;
   return obj;
 }
-function generateFestId(name = "user", phone = "") {
-  const firstName = (name || "user").trim().split(" ")[0].toLowerCase();
-  const digits = (phone || "").replace(/\D/g, "");
-  const last4 =
-    digits.length >= 4
-      ? digits.slice(-4)
-      : Math.floor(1000 + Math.random() * 9000).toString();
-  const festYear = new Date().getFullYear();
-  return `${firstName}${festYear}${last4}`;
-}
 function generateUniqueId(name = "user", phone = "") {
   const firstName = (name || "user").trim().split(" ")[0].toLowerCase();
   const digits = (phone || "").replace(/\D/g, "");
@@ -220,7 +210,6 @@ export async function POST(req) {
     }
 
     // Prepare student data
-    const festId = generateFestId(name, normalizedPhone || "");
     const uniqueId = generateUniqueId(name, normalizedPhone || "");
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -230,7 +219,6 @@ export async function POST(req) {
       password: hashedPassword,
       phone: normalizedPhone || undefined,
       role: role === "alumni" ? "alumni" : "student",
-      // festId,
       uniqueId,
       registeredEvents: [],
       events: [],
@@ -309,7 +297,7 @@ export async function POST(req) {
 
         <!-- CTA -->
         <div style="text-align: center; margin-top: 24px;">
-          <a href="${process.env.APP_URL || "http://localhost:3000"}/dashboard" 
+          <a href="https://alumni-manage-system.vercel.app/dashboard" 
              style="display: inline-block; padding: 12px 20px; background: #4A90E2; color: #fff; border-radius: 6px; text-decoration: none; font-weight: bold;">
              Go to Dashboard
           </a>
@@ -353,7 +341,7 @@ export async function POST(req) {
 
         <!-- CTA -->
         <div style="text-align: center; margin-top: 24px;">
-          <a href="${process.env.APP_URL || "http://localhost:3000"}/alumni" 
+          <a href=""https://alumni-manage-system.vercel.app/alumni" 
              style="display: inline-block; padding: 12px 20px; background: #4A90E2; color: #fff; border-radius: 6px; text-decoration: none; font-weight: bold;">
              View Alumni Directory
           </a>

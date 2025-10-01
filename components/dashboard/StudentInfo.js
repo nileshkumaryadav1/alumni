@@ -6,7 +6,7 @@ export default function StudentInfo({ student }) {
         .join("")
         .toUpperCase()
     : "ST";
-
+console.log(student);
   return (
     <div className="p-5 sm:p-6 md:p-8 rounded-3xl border border-[color:var(--border)] bg-gradient-to-br from-[color:var(--card)] to-[color:var(--background)] shadow-xl max-w-3xl mx-auto">
       {/* Header */}
@@ -20,7 +20,9 @@ export default function StudentInfo({ student }) {
             <h2 className="text-xl sm:text-2xl font-extrabold text-[color:var(--foreground)]">
               {student.name}
             </h2>
-            <p className="text-sm text-[color:var(--secondary)]">{student.email}</p>
+            <p className="text-sm text-[color:var(--secondary)]">
+              {student.email}
+            </p>
           </div>
         </div>
       </div>
@@ -29,33 +31,81 @@ export default function StudentInfo({ student }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Personal */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-[color:var(--foreground)] mb-1">👤 Personal Details</h3>
+          <h3 className="font-semibold text-[color:var(--foreground)] mb-1">
+            👤 Personal Details
+          </h3>
           <p className="text-sm">
-            <span className="font-medium text-[color:var(--foreground)]">📞 Phone:</span>{" "}
+            <span className="font-medium text-[color:var(--foreground)]">
+              📞 Phone:
+            </span>{" "}
             {student.phone || "N/A"}
           </p>
           <p className="text-sm">
-            <span className="font-medium text-[color:var(--foreground)]">📧 Email:</span>{" "}
+            <span className="font-medium text-[color:var(--foreground)]">
+              📧 Email:
+            </span>{" "}
             {student.email}
+          </p>
+          <p className="text-sm">
+            <span className="font-medium text-[color:var(--foreground)]">
+             🪪 Unique ID:
+            </span>{" "}
+            {student.uniqueId}
           </p>
         </div>
 
         {/* Academic */}
-        <div className="space-y-2">
-          <h3 className="font-semibold text-[color:var(--foreground)] mb-1">🎓 Academic Details</h3>
-          <p className="text-sm">
-            <span className="font-medium text-[color:var(--foreground)]">🏫 College:</span>{" "}
-            {student.college}
-          </p>
-          <p className="text-sm">
-            <span className="font-medium text-[color:var(--foreground)]">📅 Year:</span>{" "}
-            {student.year}
-          </p>
-          <p className="text-sm">
-            <span className="font-medium text-[color:var(--foreground)]">🛠️ Branch:</span>{" "}
-            {student.branch}
-          </p>
-        </div>
+        {student.role === "student" && (
+          <div className="space-y-2">
+            <h3 className="font-semibold text-[color:var(--foreground)] mb-1">
+              🎓 Academic Details
+            </h3>
+            <p className="text-sm">
+              <span className="font-medium text-[color:var(--foreground)]">
+                🏫 College:
+              </span>{" "}
+              {student.college}
+            </p>
+            <p className="text-sm">
+              <span className="font-medium text-[color:var(--foreground)]">
+                📅 Year:
+              </span>{" "}
+              {student.year}
+            </p>
+            <p className="text-sm">
+              <span className="font-medium text-[color:var(--foreground)]">
+                🛠️ Branch:
+              </span>{" "}
+              {student.branch}
+            </p>
+          </div>
+        )}
+
+        {student.role === "alumni" && (
+          <div className="space-y-2">
+            <h3 className="font-semibold text-[color:var(--foreground)] mb-1">
+              🎓 Academic Details
+            </h3>
+            <p className="text-sm">
+              <span className="font-medium text-[color:var(--foreground)]">
+                🏫 College:
+              </span>{" "}
+              {student.company}
+            </p>
+            <p className="text-sm">
+              <span className="font-medium text-[color:var(--foreground)]">
+                🛠️ Job:
+              </span>{" "}
+              {student.jobTitle}
+            </p>
+            <p className="text-sm">
+              <span className="font-medium text-[color:var(--foreground)]">
+                📆 Branch:
+              </span>{" "}
+              {student.batch}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
