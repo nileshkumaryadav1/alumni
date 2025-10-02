@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -15,7 +14,6 @@ import {
 import FloatingEventsPageButton from "@/components/custom/myself/FloatingEventsPageButton";
 
 export default function HomePage() {
-  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [studentData, setStudentData] = useState({});
   const [events, setEvents] = useState([]);
@@ -43,7 +41,7 @@ export default function HomePage() {
   if (isLoggedIn) {
     return (
       <section className="min-h-screen bg-background text-foreground flex flex-col pt-12">
-<h1 className="text-center font-bold text-2xl">Our System</h1>
+        <h1 className="text-center font-bold text-2xl">Our System</h1>
 
         <div className="p-6 gap-6 space-y-6 md:flex">
           {/* Sidebar */}
@@ -68,32 +66,22 @@ export default function HomePage() {
 
             {/* Links Section */}
             <div className="flex flex-col gap-3">
-              {studentData.role === "admin" && (
-                <>
-                  <Link
-                    href="/admin/events"
-                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
-                  >
-                    📅 Manage Events
-                  </Link>
-                  <Link
-                    href="/admin/users"
-                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
-                  >
-                    👥 Manage Users
-                  </Link>
-                </>
-              )}
               {studentData.role === "student" && (
                 <>
                   <Link
-                    href="/dashboard/events"
+                    href="/dashboard/network"
+                    className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
+                  >
+                    🌐 My Network
+                  </Link>
+                  <Link
+                    href="/events/registered"
                     className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
                   >
                     🎟 My Enrollments
                   </Link>
                   <Link
-                    href="/dashboard/mentors"
+                    href="/dashboard/mentorship"
                     className="dashboard-link px-4 py-2 rounded-xl hover:bg-accent/10 hover:shadow transition flex items-center gap-2"
                   >
                     🧑‍🏫 Find Mentors
@@ -139,19 +127,21 @@ export default function HomePage() {
               <h2 className="text-2xl font-bold">Latest Updates</h2>
 
               {/* Events Feed */}
-              {events.map((ev) => (
-                <motion.div
-                  key={ev.id}
-                  className="bg-card p-5 rounded-2xl shadow-md hover:shadow-xl transition"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <Calendar className="w-6 h-6 text-accent" />
-                    <h3 className="font-semibold">{ev.title}</h3>
-                  </div>
-                  <p className="text-sm text-secondary">📅 {ev.date}</p>
-                </motion.div>
-              ))}
+              {events &&
+                events.map((ev) => (
+                  <Link
+                    key={ev.id}
+                    className="bg-card p-5 rounded-2xl shadow-md hover:shadow-xl transition cursor-pointer border border-border"
+                    whileHover={{ scale: 1.02 }}
+                    href={`/events/${ev.slug}`}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <Calendar className="w-6 h-6 text-accent" />
+                      <h3 className="font-semibold">{ev.title}</h3>
+                    </div>
+                    <p className="text-sm text-secondary">📅 {ev.date}</p>
+                  </Link>
+                ))}
 
               {/* Alumni Post Example */}
               <motion.div

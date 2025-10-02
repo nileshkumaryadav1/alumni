@@ -28,7 +28,7 @@ const navLinks = [
   },
   {
     href: "/alumni",
-    label: "Alumni",
+    label: "Explore",
     icon: <PersonStandingIcon className="text-[color:var(--accent)]" />,
   },
   {

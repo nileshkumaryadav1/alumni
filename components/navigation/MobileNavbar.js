@@ -12,7 +12,7 @@ import {
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/alumni", label: "Alumni", icon: PersonStanding },
+  { href: "/alumni", label: "Explore", icon: PersonStanding },
   { href: "/events", label: "Events", icon: Calendar },
   { href: "/events/registered", label: "Enrolled", icon: CalendarFold },
   { href: "/dashboard", label: "Profile", icon: User },

@@ -6,7 +6,7 @@ export default function StudentInfo({ student }) {
         .join("")
         .toUpperCase()
     : "ST";
-console.log(student);
+    
   return (
     <div className="p-5 sm:p-6 md:p-8 rounded-3xl border border-[color:var(--border)] bg-gradient-to-br from-[color:var(--card)] to-[color:var(--background)] shadow-xl max-w-3xl mx-auto">
       {/* Header */}
