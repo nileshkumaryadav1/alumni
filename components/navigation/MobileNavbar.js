@@ -6,15 +6,16 @@ import {
   Home,
   Calendar,
   User,
-  CalendarFold,
   PersonStanding,
+  GlobeIcon,
 } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/alumni", label: "Explore", icon: PersonStanding },
-  { href: "/events", label: "Events", icon: Calendar },
-  { href: "/events/registered", label: "Enrolled", icon: CalendarFold },
+  { href: "/networking", label: "Network", icon: GlobeIcon },
+  { href: "/events/all", label: "Events", icon: Calendar },
+  // { href: "/events/registered", label: "Enrolled", icon: CalendarFold },
   { href: "/dashboard", label: "Profile", icon: User },
 ];
 

@@ -6,7 +6,6 @@ import {
   ShieldCheck,
   LayoutDashboard,
   Users,
-  Trophy,
   Settings,
   LogOut,
   Pencil,
@@ -14,12 +13,9 @@ import {
   Menu,
   X,
   Home,
-  ArchiveRestore,
-  CalendarRange,
   Mail,
 } from "lucide-react";
 import { useEffect } from "react";
-// import { useRouter } from "next/router";
 
 const adminLinks = [
   { name: "Dashboard", href: "/admin", icon: User },
@@ -37,7 +33,6 @@ export default function AdminSidebar({
   sidebarOpen,
 }) {
   const pathname = usePathname();
-  // const router = useRouter();
 
   // ✅ Close sidebar when route changes (mobile)
   useEffect(() => {
@@ -59,9 +54,9 @@ export default function AdminSidebar({
           onClick={closeSidebar}
         >
           {sidebarOpen ? (
-            <X className="w-5 h-5" /> // Cross icon when open
+            <X className="w-5 h-5" />
           ) : (
-            <Menu className="w-5 h-5" /> // Menu icon when closed
+            <Menu className="w-5 h-5" />
           )}
         </button>
       </div>

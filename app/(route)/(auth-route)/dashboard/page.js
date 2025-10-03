@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { LogOut, Pencil, Trash2 } from "lucide-react";
 import StudentInfo from "@/components/dashboard/StudentInfo";
 import RegisteredForEvent from "@/components/dashboard/RegisteredForEvent";
+import MentorshipPageComp from "@/components/mentorship/MentorshipPageComp";
+import NetworkPageComp from "@/components/network/NetworkPageComp";
 
 export default function DashboardPage() {
   const [student, setStudent] = useState(null);
@@ -142,14 +144,14 @@ export default function DashboardPage() {
           <RegisteredForEvent />
         </section>
 
-        {/* Future Teams / Mentorship Section */}
+        {/* Networking Section */}
         <section className="p-6 sm:p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/20 shadow-md">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">
-            Coming Soon 🚀
-          </h2>
-          <p className="text-sm text-[color:var(--muted-foreground)]">
-            Teams, mentorship programs, and more integrations will appear here.
-          </p>
+          <NetworkPageComp />
+        </section>
+
+        {/* Mentorship Section */}
+        <section className="p-6 sm:p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/20 shadow-md">
+          <MentorshipPageComp />
         </section>
       </div>
     </main>

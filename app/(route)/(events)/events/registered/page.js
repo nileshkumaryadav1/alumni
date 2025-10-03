@@ -2,12 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { LogOut, Pencil, CalendarCheck } from "lucide-react";
-import EnrolledEvents from "@/components/fest/EnrolledEvent";
 import RegisteredForEvent from "@/components/dashboard/RegisteredForEvent";
 
-export default function DashboardPage() {
+export default function RegisteredEvents() {
   const [student, setStudent] = useState(null);
   const [events, setEvents] = useState([]);
   const router = useRouter();
@@ -56,11 +53,6 @@ export default function DashboardPage() {
       }}
     >
       <div className="max-w-4xl mx-auto space-y-6">
-        {/* <section>
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <CalendarCheck size={20} /> Registered Events
-          </h2>
-        </section> */}
         <section>
           <RegisteredForEvent />
         </section>

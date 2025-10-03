@@ -65,28 +65,28 @@ export default function EventListPage() {
   const uniqueCategories = ["All", ...new Set(events.map((e) => e.category))];
 
   return (
-    <main className="min-h-screen px-6 md:px-20 py-16 bg-[var(--background)] text-[var(--foreground)]">
+    <main className="min-h-screen px-6 md:px-20 md:py-10 py-6 bg-[var(--background)] text-[var(--foreground)]">
       {/* Title with Motion */}
       <motion.div
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="text-center mb-12"
+        className="text-center md:mb-6 mb-2"
       >
-        <div className="flex justify-center mb-4">
-          <MdEventAvailable className="w-16 h-16 text-accent" />
-          <h1 className="text-4xl md:text-5xl font-bold my-2">
+        <div className="flex justify-center md:mb-4 mb-2">
+          <MdEventAvailable className="w-10 h-10 md:w-16 md:h-16 text-accent" />
+          <h1 className="text-3xl md:text-5xl font-bold md:my-2">
             <span className="text-accent">Events</span>
           </h1>
         </div>
 
-        <p className="mt-3 text-lg text-secondary max-w-2xl mx-auto">
+        <p className="mt-1 text-lg text-secondary max-w-2xl mx-auto">
           Stay updated with the latest activities, workshops, and fests
           happening around.
         </p>
       </motion.div>
 
-      <div className="max-w-6xl mx-auto space-y-10">
+      <div className="max-w-6xl mx-auto md:space-y-6 space-y-4">
         {/* Filter Bar with Motion */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}

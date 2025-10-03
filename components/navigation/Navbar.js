@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, Menu, X, ChevronDown, PersonStandingIcon } from "lucide-react";
+import { GraduationCap, Menu, X, ChevronDown, PersonStandingIcon, Globe } from "lucide-react";
 
 // Import icons
 import {
@@ -30,6 +30,11 @@ const navLinks = [
     href: "/alumni",
     label: "Explore",
     icon: <PersonStandingIcon className="text-[color:var(--accent)]" />,
+  },
+  {
+    href: "/networking",
+    label: "Network",
+    icon: <Globe className="text-[color:var(--accent)]" />,
   },
   {
     label: "Events",

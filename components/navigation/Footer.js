@@ -26,8 +26,9 @@ const Footer = () => {
         <ul className="flex justify-center flex-wrap gap-4">
           {[
             { href: "/", label: "Home" },
-            { href: "/events", label: "Events" },
             { href: "/alumni", label: "Explore" },
+            { href: "/networking", label: "Network" },
+            { href: "/events", label: "Events" },
             { href: "/dashboard", label: "Profile" },
           ].map((link) => (
             <li key={link.href}>

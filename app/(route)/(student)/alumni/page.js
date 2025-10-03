@@ -14,8 +14,10 @@ import {
   IdCard,
   Phone,
   Mail,
+  UserCircle2,
 } from "lucide-react";
 import EventCard from "@/components/fest/EventCard";
+import StudentCardWithConnectBtn from "@/components/network/StudentCardWithConnectBtn";
 
 export default function MainPage() {
   const [student, setStudent] = useState(null);
@@ -105,13 +107,12 @@ export default function MainPage() {
         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-[color:var(--highlight)] text-center">
           Top Alumni
         </h2>
-        <div className="flex item-center gap-4 overflow-x-auto scrollbar-hide">
+        {/* <div className="flex item-center gap-4 overflow-x-auto scrollbar-hide">
           {preview.map((user) => (
             <div
               key={user._id}
               className="min-w-[220px] p-4 border border-[color:var(--border)] rounded-xl shadow-md bg-[color:var(--card)]"
-            >
-              {/* User Header */}
+            >              
               <div className="flex flex-col items-center mb-4">
                 <UserCircle className="w-16 h-16 text-[color:var(--accent)] mb-2" />
                 <h2 className="text-lg font-semibold text-[color:var(--foreground)] text-center">
@@ -130,7 +131,6 @@ export default function MainPage() {
                 </div>
               </div>
 
-              {/* User Info */}
               <div className="space-y-2 text-sm border-t border-[color:var(--border)] pt-3">
                 <p className="flex items-center gap-2 text-[color:var(--secondary)]">
                   <Mail className="w-4 h-4 text-[color:var(--highlight)]" />
@@ -172,12 +172,18 @@ export default function MainPage() {
               </div>
             </div>
           ))}
-        </div>
-        {!student && (
+        </div> */}
+
+        {/* {!student && (
           <p className="text-sm mt-2 text-center text-[color:var(--secondary)]">
             Login to see full alumni network.
           </p>
-        )}
+        )} */}
+
+        {/* Alumni card with connect btn */}
+        <div>
+          <StudentCardWithConnectBtn student={preview} />
+        </div>
       </section>
     );
   };
