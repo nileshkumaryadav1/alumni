@@ -7,6 +7,7 @@ import StudentInfo from "@/components/dashboard/StudentInfo";
 import RegisteredForEvent from "@/components/dashboard/RegisteredForEvent";
 import MentorshipPageComp from "@/components/mentorship/MentorshipPageComp";
 import NetworkPageComp from "@/components/network/NetworkPageComp";
+import toast from "react-hot-toast";
 
 export default function DashboardPage() {
   const [student, setStudent] = useState(null);
@@ -62,6 +63,7 @@ export default function DashboardPage() {
 
   const handleLogout = () => {
     if (!confirm("🔒 Are you sure you want to logout?")) return;
+    toast.success("Logout successful.");
     localStorage.removeItem("student");
     router.replace("/login");
   };
@@ -76,15 +78,18 @@ export default function DashboardPage() {
         method: "DELETE",
       });
       if (res.ok) {
-        alert("Account deleted.");
+        // alert("Account deleted.");
+        toast("Account deleted.");
         localStorage.removeItem("student");
         router.push("/register");
       } else {
-        alert("Failed to delete account.");
+        // alert("Failed to delete account.");
+        toast("Failed to delete account.");
       }
     } catch (err) {
       console.error("Delete failed:", err);
-      alert("An error occurred.");
+      // alert("An error occurred.");
+      toast("An error occurred.");
     }
   };
 

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { UserCircle } from "lucide-react";
 import React from "react";
+import ConnectButton from "./ConnectButton";
 
 export default function StudentCardWithConnectBtn({ student }) {
   return (
@@ -24,12 +25,7 @@ export default function StudentCardWithConnectBtn({ student }) {
                   {u.batch || u.year || "Unknown"}
                 </p>
               </div>
-              <button
-                className="px-4 py-2 bg-accent text-white rounded-full hover:scale-105 transition"
-                onClick={() => handleConnect(u)}
-              >
-                Connect
-              </button>
+              <ConnectButton />
             </motion.div>
           ))}
         </div>

@@ -11,13 +11,15 @@ import {
   XCircle,
   Linkedin,
   IdCard,
-  IdCardIcon,
 } from "lucide-react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function AdminAllUsers() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [enrollments, setEnrollments] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     axios
@@ -48,10 +50,12 @@ export default function AdminAllUsers() {
       await axios.delete("/api/admin/users", { data: { email } });
       // Remove deleted user from state
       setUsers((prev) => prev.filter((u) => u.email !== email));
-      alert("User deleted successfully");
+      // alert("User deleted successfully");
+      toast("User deleted successfully");
     } catch (err) {
       console.error("Error deleting user:", err);
-      alert("Failed to delete user");
+      // alert("Failed to delete user");
+      toast("Failed to delete user");
     }
   };
 
@@ -95,7 +99,7 @@ export default function AdminAllUsers() {
             return (
               <div
                 key={user._id}
-                className="p-6 border border-[color:var(--border)] rounded-2xl shadow-md bg-[color:var(--card)] backdrop-blur-md hover:shadow-lg hover:scale-[1.02] transition-transform duration-300"
+                className="p-6 border border-[color:var(--border)] rounded-2xl shadow-md bg-[color:var(--card)] backdrop-blur-md hover:shadow-lg hover:scale-[1.001] transition-transform duration-300"
               >
                 {/* User Header */}
                 <div className="flex flex-col items-center mb-4">
@@ -181,12 +185,20 @@ export default function AdminAllUsers() {
                   )}
                 </div>
 
+                {/* alumni/student full deatils btn */}
+                <button
+                  onClick={() => router.push(`/admin/users/${user._id}`)}
+                  className="mt-4 w-full px-4 py-2 text-sm font-semibold text-white bg-accent rounded-lg transition cursor-pointer"
+                >
+                  View full details
+                </button>
+
                 {/* Delete user btn */}
                 <button
                   onClick={() => handleDelete(user.email)}
                   className="mt-4 w-full px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition cursor-pointer"
                 >
-                  Delete User
+                  Remove student
                 </button>
               </div>
             );

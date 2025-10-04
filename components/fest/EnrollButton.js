@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Users } from "lucide-react";
+import toast from "react-hot-toast";
 
 /**
  * EnrollButton Component
@@ -34,7 +35,8 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
   // -------------------- Solo Enroll --------------------
   const handleSoloEnroll = async () => {
     if (!student?._id) {
-      alert("Please login to enroll in this event.");
+      // alert("Please login to enroll in this event.");
+      toast("Please login to enroll in this event.");
       router.push("/login");
       return;
     }
@@ -58,12 +60,14 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
       if (!res.ok) throw new Error(data.error || "Enrollment failed");
 
       setStatus("success");
-      alert("Enrolled successfully!");
+      // alert("Enrolled successfully!");
+      toast.success("Enrolled successfully!");
       router.refresh();
     } catch (err) {
       console.error("Enrollment error:", err);
       setStatus("error");
-      alert("Enrollment failed: " + err.message);
+      // alert("Enrollment failed: " + err.message);
+      toast("Enrollment failed: " + err.message);
     } finally {
       setStatus("idle");
     }
@@ -72,20 +76,23 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
   // -------------------- Team Enroll --------------------
   const handleTeamEnroll = async () => {
     if (!student?._id || !student?.uniqueId) {
-      alert("Please login to enroll in this event.");
+      // alert("Please login to enroll in this event.");
+      toast("Please login to enroll in this event.");
       router.push("/login");
       return;
     }
 
     if (!teamName.trim()) {
-      alert("Enter a team name.");
+      // alert("Enter a team name.");
+      toast("Enter a team name.");
       return;
     }
 
     const filteredMembers = members.map((m) => m.trim()).filter(Boolean);
 
     if (filteredMembers.length === 0) {
-      alert("Add at least one team member Fest ID.");
+      // alert("Add at least one team member Fest ID.");
+      toast("Add at least one team member Fest ID.");
       return;
     }
 
@@ -108,7 +115,8 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
       if (!res.ok) throw new Error(data.error || "Team enrollment failed");
 
       setStatus("success");
-      alert("Team enrolled successfully!");
+      // alert("Team enrolled successfully!");
+      toast("Team enrolled successfully!");
       setShowTeamModal(false);
       setTeamName("");
       setMembers([""]);
@@ -116,7 +124,8 @@ export default function EnrollButton({ eventId, type, isEnrolled }) {
     } catch (err) {
       console.error("Team enrollment error:", err);
       setStatus("error");
-      alert("Team enrollment failed: " + err.message);
+      // alert("Team enrollment failed: " + err.message);
+      toast("Team enrollment failed: " + err.message);
     } finally {
       setStatus("idle");
     }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, UserPlus, UserCheck, Network, UserCircle } from "lucide-react";
 import axios from "axios";
+import NotLoginPromptCard from "../extra/NotLoginPrompt";
 
 export default function NetworkPageComp() {
   const [student, setStudent] = useState(null);
@@ -23,7 +24,7 @@ export default function NetworkPageComp() {
     const fetchData = async () => {
       try {
         const { data: users } = await axios.get("/api/admin/users");
-        setAllUsers(users.filter(u => u._id !== parsed._id));
+        setAllUsers(users.filter((u) => u._id !== parsed._id));
 
         const res = await axios.get(`/api/connect?userId=${parsed._id}`);
         setIncoming(res.data.incoming || []);
@@ -52,7 +53,10 @@ export default function NetworkPageComp() {
 
   const handleConnect = async (u) => {
     if (!student) return;
-    await axios.post("/api/connect", { senderId: student._id, receiverId: u._id });
+    await axios.post("/api/connect", {
+      senderId: student._id,
+      receiverId: u._id,
+    });
     refresh();
   };
   const handleAccept = async (connId) => {
@@ -69,25 +73,28 @@ export default function NetworkPageComp() {
   };
 
   // filter suggestions = users not in incoming/outgoing/friends
-  const suggestions = allUsers.filter(u =>
-    !incoming.some(r => r.user?._id === u._id) &&
-    !outgoing.some(r => r.user?._id === u._id) &&
-    !friends.some(f => f.user?._id === u._id)
+  const suggestions = allUsers.filter(
+    (u) =>
+      !incoming.some((r) => r.user?._id === u._id) &&
+      !outgoing.some((r) => r.user?._id === u._id) &&
+      !friends.some((f) => f.user?._id === u._id)
   );
 
-  if (loading) return <p className="p-6 text-secondary text-center">Loading...</p>;
+  if (loading)
+    return <p className="p-6 text-secondary text-center">Loading...</p>;
 
   if (!student)
     return (
-      <section className="flex flex-col items-center justify-center min-h-screen text-center px-6">
+      <section className="flex flex-col items-center justify-center md:min-h-screen py-10 text-center px-6">
         <Network className="w-24 h-24 text-accent mb-6 drop-shadow-lg" />
         <h1 className="text-4xl sm:text-6xl font-extrabold">
           Build Your <span className="text-accent">Network</span>
         </h1>
-        <p className="mt-4 text-lg sm:text-xl text-secondary max-w-2xl">
+        <p className="my-4 text-lg sm:text-xl text-secondary max-w-2xl">
           Connect with alumni and students. Grow together, mentor each other,
           unlock opportunities.
         </p>
+        <NotLoginPromptCard />
       </section>
     );
 
@@ -98,7 +105,7 @@ export default function NetworkPageComp() {
           <p className="text-secondary text-center">No incoming requests</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {incoming.map(r => (
+            {incoming.map((r) => (
               <motion.div
                 key={r._id || r.connId}
                 initial={{ opacity: 0, y: 20 }}
@@ -132,7 +139,7 @@ export default function NetworkPageComp() {
           <p className="text-secondary text-center">No friends yet</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {friends.map(f => (
+            {friends.map((f) => (
               <motion.div
                 key={f._id || f.connId}
                 initial={{ opacity: 0, y: 20 }}
@@ -160,7 +167,7 @@ export default function NetworkPageComp() {
           <p className="text-secondary text-center">No suggestions available</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {suggestions.map(u => (
+            {suggestions.map((u) => (
               <motion.div
                 key={u._id}
                 initial={{ opacity: 0, y: 20 }}
@@ -171,7 +178,9 @@ export default function NetworkPageComp() {
                 <UserCircle className="w-16 h-16 text-accent" />
                 <div className="flex-1">
                   <p className="font-medium">{u.name}</p>
-                  <p className="text-sm text-secondary">{u.batch || u.year || "Unknown"}</p>
+                  <p className="text-sm text-secondary">
+                    {u.batch || u.year || "Unknown"}
+                  </p>
                 </div>
                 <button
                   className="px-4 py-2 bg-accent text-white rounded-full hover:scale-105 transition"
@@ -202,7 +211,7 @@ export default function NetworkPageComp() {
           { key: "requests", label: "Requests", icon: UserPlus },
           { key: "friends", label: "Friends", icon: UserCheck },
           { key: "suggestions", label: "Suggestions", icon: Users },
-        ].map(tab => {
+        ].map((tab) => {
           const isActive = activeTab === tab.key;
           return (
             <button

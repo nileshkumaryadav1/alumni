@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientWrapper from "./client-wrapper";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,6 +56,7 @@ export default function RootLayout({ children }) {
           {/* Only wrap interactive components in ClientWrapper */}
           <ClientWrapper>{children}</ClientWrapper>
         </SessionProviderWrapper>
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   );

@@ -4,20 +4,13 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import axios from "axios";
-import {
-  Users,
-  Search,
-  PlusCircle,
-  UserCircle,
-  Linkedin,
-  GraduationCap,
-  IdCard,
-  Phone,
-  Mail,
-  UserCircle2,
-} from "lucide-react";
+import { Users, Search, PlusCircle } from "lucide-react";
 import EventCard from "@/components/fest/EventCard";
 import StudentCardWithConnectBtn from "@/components/network/StudentCardWithConnectBtn";
+import StatsSection from "@/components/explore/StatOverViewSection";
+import QuickLinksSection from "@/components/explore/QuickLinkSection";
+import JoinCard from "@/components/explore/JoinCard";
+import HeroSection from "@/components/explore/HeroSection";
 
 export default function MainPage() {
   const [student, setStudent] = useState(null);
@@ -61,43 +54,6 @@ export default function MainPage() {
 
   /** ------------------- COMPONENTS ------------------- **/
 
-  const HeroSection = () => (
-    <section className="min-h-[60vh] flex flex-col items-center justify-center bg-gradient-to-r from-blue-100 to-blue-50 text-center px-6">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <Users className="w-20 h-20 text-accent mx-auto mb-4" />
-        <h1 className="text-4xl sm:text-6xl font-bold mb-4">
-          {student ? `Welcome, ${student.name}!` : "Alumni & Student Network"}
-        </h1>
-        <p className="text-lg sm:text-xl text-secondary max-w-2xl mx-auto">
-          {student
-            ? "Connect, explore events, and see achievements in your community."
-            : "Discover, connect, and collaborate with students and alumni. Join now!"}
-        </p>
-
-        {!student && (
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-lg font-semibold text-background shadow-lg hover:scale-105 transition"
-            >
-              <PlusCircle className="w-5 h-5" /> Register
-            </Link>
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-accent px-6 py-3 text-lg font-semibold text-accent hover:bg-accent hover:text-background hover:scale-105 transition"
-            >
-              <Search className="w-5 h-5" /> Login
-            </Link>
-          </div>
-        )}
-      </motion.div>
-    </section>
-  );
-
   const AlumniCarousel = () => {
     const alumni = users.filter((u) => u.role === "alumni");
     const preview = student ? alumni : alumni.slice(0, 3);
@@ -107,78 +63,6 @@ export default function MainPage() {
         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-[color:var(--highlight)] text-center">
           Top Alumni
         </h2>
-        {/* <div className="flex item-center gap-4 overflow-x-auto scrollbar-hide">
-          {preview.map((user) => (
-            <div
-              key={user._id}
-              className="min-w-[220px] p-4 border border-[color:var(--border)] rounded-xl shadow-md bg-[color:var(--card)]"
-            >              
-              <div className="flex flex-col items-center mb-4">
-                <UserCircle className="w-16 h-16 text-[color:var(--accent)] mb-2" />
-                <h2 className="text-lg font-semibold text-[color:var(--foreground)] text-center">
-                  {user.name}
-                </h2>
-                <div
-                  className={`inline-block px-3 py-1 rounded-full text-sm font-semibold uppercase ${
-                    user.role === "student"
-                      ? "bg-blue-100 text-blue-700"
-                      : user.role === "alumni"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {user.role}
-                </div>
-              </div>
-
-              <div className="space-y-2 text-sm border-t border-[color:var(--border)] pt-3">
-                <p className="flex items-center gap-2 text-[color:var(--secondary)]">
-                  <Mail className="w-4 h-4 text-[color:var(--highlight)]" />
-                  <span>{user.email}</span>
-                </p>
-                {user.phone && (
-                  <p className="flex items-center gap-2 text-[color:var(--secondary)]">
-                    <Phone className="w-4 h-4 text-[color:var(--highlight)]" />
-                    <span>{user.phone}</span>
-                  </p>
-                )}
-                {user.uniqueId && (
-                  <p className="flex items-center gap-2 text-[color:var(--secondary)]">
-                    <IdCard className="w-4 h-4 text-[color:var(--highlight)]" />
-                    <span>uniqueId: {user.uniqueId}</span>
-                  </p>
-                )}
-                {(user.college || user.company) && (
-                  <p className="flex items-center gap-2 text-[color:var(--secondary)]">
-                    <GraduationCap className="w-4 h-4 text-[color:var(--highlight)]" />
-                    <span>
-                      {user.role === "student" && user.college}
-                      {user.role === "alumni" &&
-                        `${user.jobTitle} at ${user.company} (${user.batch})`}
-                    </span>
-                  </p>
-                )}
-                {user.linkedin && (
-                  <p className="text-xs text-[color:var(--accent)] hover:underline break-all flex items-center justify-center">
-                    <a
-                      href={user.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Linkedin className="w-6 h-6" />
-                    </a>
-                  </p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div> */}
-
-        {/* {!student && (
-          <p className="text-sm mt-2 text-center text-[color:var(--secondary)]">
-            Login to see full alumni network.
-          </p>
-        )} */}
 
         {/* Alumni card with connect btn */}
         <div>
@@ -286,12 +170,15 @@ export default function MainPage() {
 
   /** ------------------- RENDER ------------------- **/
   return (
-    <main className="bg-background text-foreground">
-      <HeroSection />
+    <main className="bg-background text-foreground px-4">
+      <HeroSection student={student} />
+      <StatsSection />
+      <QuickLinksSection />
       <AlumniCarousel />
       <EventsSection />
       <AchievementsSection />
       <FundraisingSection />
+      {!student && <JoinCard />}
     </main>
   );
 }

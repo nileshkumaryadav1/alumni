@@ -3,15 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  Key,
-  KeyIcon,
-  Lock,
-  SquareRoundCorner,
-  SquareRoundCornerIcon,
-} from "lucide-react";
-import { FaRegistered } from "react-icons/fa";
-import { MdSystemSecurityUpdateWarning } from "react-icons/md";
+import { KeyIcon, CheckCircle2, XCircle } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const router = useRouter();
@@ -47,7 +40,8 @@ export default function Register() {
 
   const sendOtp = async (e) => {
     e.preventDefault();
-    if (!form.email && !form.phone) return alert("Enter email or phone.");
+    if (!form.email && !form.phone)
+      return toast.error("Enter email or phone before sending OTP.");
 
     setLoading(true);
     try {
@@ -57,11 +51,13 @@ export default function Register() {
         body: JSON.stringify({ email: form.email, phone: form.phone }),
       });
       const data = await res.json();
-      if (res.ok) setStep(2);
-      else alert(data.message || "Failed to send OTP.");
+      if (res.ok) {
+        setStep(2);
+        toast.success("OTP sent successfully! 📩");
+      } else toast.error(data.message || "Failed to send OTP.");
     } catch (err) {
       console.error(err);
-      alert("Something went wrong sending OTP.");
+      toast.error("Something went wrong while sending OTP.");
     } finally {
       setLoading(false);
     }
@@ -69,7 +65,7 @@ export default function Register() {
 
   const verifyOtp = async (e) => {
     e.preventDefault();
-    if (!otp.trim()) return alert("Enter OTP.");
+    if (!otp.trim()) return toast.error("Please enter your OTP.");
 
     setLoading(true);
     try {
@@ -81,39 +77,40 @@ export default function Register() {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("student", JSON.stringify(data.student));
+        toast.success("Registration successful! 🎉");
         router.push("/dashboard");
       } else {
-        alert(data.message || "OTP verification failed.");
+        toast.error(data.message || "OTP verification failed.");
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong verifying OTP.");
+      toast.error("Something went wrong verifying OTP.");
     } finally {
       setLoading(false);
     }
   };
 
   const inputClasses =
-    "w-full px-4 py-3 border border-[color:var(--border)] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent placeholder:text-muted-foreground bg-background text-foreground";
+    "w-full px-4 py-3 border border-[color:var(--border)] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-accent/70 focus:border-accent bg-background text-foreground placeholder:text-muted-foreground transition";
 
   const buttonClasses =
-    "w-full py-3 bg-accent text-background font-semibold rounded-lg shadow-md hover:bg-accent/90 transition";
+    "w-full py-3 bg-accent text-background font-semibold rounded-xl shadow-md hover:bg-accent/90 transition active:scale-[0.98] disabled:opacity-60";
 
   const selectClasses =
-    "w-full px-4 py-3 border border-[color:var(--border)] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent bg-background text-foreground";
+    "w-full px-4 py-3 border border-[color:var(--border)] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-accent/70 focus:border-accent bg-background text-foreground";
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 bg-background">
-      <div className="w-full max-w-3xl">
-        <h2 className="text-3xl font-bold text-center mb-6 text-accent">
-          <KeyIcon className="w-6 h-6 inline-block" /> Register
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background via-background to-muted px-4 py-10">
+      <div className="w-full max-w-3xl bg-card border border-border shadow-lg rounded-3xl p-8 md:p-10">
+        <h2 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-accent to-accent/70 bg-clip-text text-transparent flex items-center justify-center gap-2">
+          <KeyIcon className="w-8 h-8" /> Create Account
         </h2>
 
-        {/* Step 1: Form */}
+        {/* Step 1 */}
         {step === 1 && (
           <form
             onSubmit={sendOtp}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-8 bg-card rounded-3xl shadow-lg border border-[color:var(--border)]"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
           >
             <input
               type="text"
@@ -156,8 +153,8 @@ export default function Register() {
               onChange={handleChange}
               className={selectClasses}
             >
-              <option value="student">Student</option>
-              <option value="alumni">Alumni</option>
+              <option value="student">🎓 Student</option>
+              <option value="alumni">💼 Alumni</option>
             </select>
 
             {form.role === "student" && (
@@ -226,21 +223,26 @@ export default function Register() {
               </>
             )}
 
-            <button type="submit" disabled={loading} className={buttonClasses}>
-              {loading ? "⏳ Sending OTP..." : "Send OTP"}
-            </button>
+            <div className="col-span-1 sm:col-span-2">
+              <button type="submit" disabled={loading} className={buttonClasses}>
+                {loading ? "⏳ Sending OTP..." : "Send OTP"}
+              </button>
+            </div>
           </form>
         )}
 
-        {/* Step 2: OTP */}
+        {/* Step 2 */}
         {step === 2 && (
           <form
             onSubmit={verifyOtp}
-            className="flex flex-col gap-4 p-6 bg-card rounded-3xl shadow-lg max-w-2xl border border-[color:var(--border)]"
+            className="flex flex-col gap-5 max-w-md mx-auto text-center"
           >
-            <h2 className="text-2xl font-bold text-center mb-4 text-accent">
+            <h3 className="text-2xl font-semibold text-accent mb-2">
               Verify OTP
-            </h2>
+            </h3>
+            <p className="text-muted-foreground text-sm">
+              Enter the 6-digit code sent to your email or phone.
+            </p>
             <input
               type="text"
               placeholder="Enter OTP"
@@ -252,31 +254,31 @@ export default function Register() {
             <button type="submit" disabled={loading} className={buttonClasses}>
               {loading ? "⏳ Verifying..." : "Verify & Register"}
             </button>
-            {/* Resend OTP */}
             <button
               type="button"
               onClick={sendOtp}
               disabled={loading}
-              className="mt-2 w-full py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition cursor-pointer"
+              className="py-2 text-accent font-medium hover:underline"
             >
               {loading ? "⏳ Processing..." : "Resend OTP"}
             </button>
           </form>
         )}
 
-        <p className="text-center mt-6 text-sm text-secondary">
-          Already have an account?{" "}
-          <Link href="/login" className="text-accent hover:underline">
-            Login
-          </Link>
-        </p>
-
-        <p className="text-center mt-2 text-sm text-secondary">
-          Forgot your password?{" "}
-          <Link href="/reset-password" className="text-accent hover:underline">
-            Reset here{" "}
-          </Link>
-        </p>
+        <div className="mt-8 text-center space-y-2">
+          <p className="text-sm text-secondary">
+            Already have an account?{" "}
+            <Link href="/login" className="text-accent hover:underline">
+              Login
+            </Link>
+          </p>
+          <p className="text-sm text-secondary">
+            Forgot your password?{" "}
+            <Link href="/reset-password" className="text-accent hover:underline">
+              Reset here
+            </Link>
+          </p>
+        </div>
       </div>
     </section>
   );

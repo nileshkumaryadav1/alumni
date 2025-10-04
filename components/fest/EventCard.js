@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import EnrollButton from "./EnrollButton";
 import CountdownTimer from "../custom/CountdownTimer";
+import toast from "react-hot-toast";
 
 export default function EventCard({ event }) {
   const [student, setStudent] = useState(null);
@@ -71,7 +72,8 @@ export default function EventCard({ event }) {
     } catch {
       // Fallback: copy link to clipboard
       await navigator.clipboard.writeText(eventUrl);
-      alert("🔗 Event link copied to clipboard!");
+      // alert("🔗 Event link copied to clipboard!");
+      toast("🔗 Event link copied to clipboard!");
     }
   };
 

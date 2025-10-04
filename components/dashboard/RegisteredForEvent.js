@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Users, Calendar, UserCircle } from "lucide-react";
 import Link from "next/link";
 import CountdownTimer from "../custom/CountdownTimer";
 import LoadingSkeletonSmall from "../custom/myself/LoadingSkeletonSmall";
 import LoadingSkeleton from "../custom/myself/LoadingSkeleton";
+import toast from "react-hot-toast";
+import NotLoginPromptCard from "../extra/NotLoginPrompt";
+import { User } from "lucide-react";
 
 export default function RegisteredForEvent() {
   const [enrollments, setEnrollments] = useState([]);
@@ -36,6 +38,21 @@ export default function RegisteredForEvent() {
 
     fetchEnrollments();
   }, []);
+
+if (!student)
+    return (
+      <section className="flex flex-col items-center justify-center md:min-h-screen py-10 text-center px-6">
+        <User className="w-24 h-24 text-accent mb-6 drop-shadow-lg" />
+        <h1 className="text-4xl sm:text-6xl font-extrabold">
+          Get <span className="text-accent">Logged In</span>
+        </h1>
+        <p className="my-4 text-lg sm:text-xl text-secondary max-w-2xl">
+          To register for events, Connect with alumni and students. Grow together, mentor each other,
+          unlock opportunities.
+        </p>
+        <NotLoginPromptCard />
+      </section>
+    );
 
   // Filter student-specific enrollments
   const studentEnrollments = enrollments.filter(
@@ -70,11 +87,13 @@ export default function RegisteredForEvent() {
           (prev) => prev.filter((e) => e.eventId !== eventId) // use schema field
         );
       } else {
-        alert("Failed to de-enroll.");
+        // alert("Failed to de-enroll.");
+        toast("Failed to de-enroll.");
       }
     } catch (err) {
       console.error("Error de-enrolling:", err);
-      alert("Something went wrong.");
+      // alert("Something went wrong.");
+      toast("Something went wrong.");
     }
   };
 
@@ -145,7 +164,8 @@ export default function RegisteredForEvent() {
                     <span className="text-sm sm:text-base font-bold text-[color:var(--accent)] mb-1">
                       #{idx + 1}
                     </span>
-                    <Calendar className="w-10 h-10 text-blue-500 mb-2" />
+                    {/* <Calendar className="w-10 h-10 text-blue-500 mb-2" /> */}
+                    <img src={event.imageUrl} className="rounded-lg mb-1" />
                     <h3 className="text-lg font-semibold text-[color:var(--foreground)] break-words">
                       {event?.name}
                     </h3>
@@ -175,7 +195,7 @@ export default function RegisteredForEvent() {
                   </div>
 
                   {/* Event Badge Solo/Team */}
-                  <div className="mt-1 flex justify-center gap-2 relative z-10 flex-wrap">
+                  {/* <div className="mt-1 flex justify-center gap-2 relative z-10 flex-wrap">
                     <span
                       className={`px-2 py-1 text-xs rounded-full font-semibold ${
                         enroll.participants?.length > 1
@@ -187,27 +207,27 @@ export default function RegisteredForEvent() {
                         ? "Team Event"
                         : "Solo Event"}
                     </span>
-                  </div>
+                  </div> */}
 
                   {/* Team Info */}
-                  {enroll.teamName && (
+                  {/* {enroll.teamName && (
                     <div className="mt-3 text-sm text-[color:var(--secondary)] relative z-10">
                       <span className="font-medium">Team:</span>{" "}
                       {enroll.teamName}
                     </div>
-                  )}
+                  )} */}
 
                   {/* Registered By */}
-                  <div className="text-sm mt-2 flex items-center gap-2 text-[color:var(--foreground)] relative z-10">
+                  {/* <div className="text-sm mt-2 flex items-center gap-2 text-[color:var(--foreground)] relative z-10">
                     <UserCircle className="w-4 h-4 text-blue-500" />
                     <span>
                       Registered by: {enroll.registeredBy?.name}
-                      {/*  ({enroll.registeredBy?.email}) */}
+                      // ({enroll.registeredBy?.email})
                     </span>
-                  </div>
+                  </div> */}
 
                   {/* Participants */}
-                  <div className="mt-3 relative z-10">
+                  {/* <div className="mt-3 relative z-10">
                     <p className="text-sm font-medium flex items-center gap-2 mb-2 text-[color:var(--foreground)]">
                       <Users className="w-4 h-4" />
                       Participants ({enroll.participants?.length || 0})
@@ -223,7 +243,7 @@ export default function RegisteredForEvent() {
                           }
                         >
                           {p.name} 
-                          {/* ({p.email}) */}
+                          // ({p.email})
                         </li>
                       )) || (
                         <li className="italic text-gray-400">
@@ -231,7 +251,7 @@ export default function RegisteredForEvent() {
                         </li>
                       )}
                     </ul>
-                  </div>
+                  </div> */}
 
                   {/* Actions */}
                   <div className="flex flex-wrap justify-center gap-2 mt-4 relative z-10">

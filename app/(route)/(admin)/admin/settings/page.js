@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Loader2, LogOut, UserPlus, Trash2, SunMoon } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function AdminSettings() {
   const [admin, setAdmin] = useState(null);
@@ -40,18 +41,21 @@ export default function AdminSettings() {
 
   const handleAddAdmin = async () => {
     if (!newAdmin.name || !newAdmin.email || !newAdmin.password) {
-      alert("Please fill all fields.");
+      // alert("Please fill all fields.");
+      toast("Please fill all fields.");
       return;
     }
 
     setLoading(true);
     try {
       await axios.post("/api/admin/add", newAdmin);
-      alert("✅ New admin added!");
+      // alert("✅ New admin added!");
+      toast("✅ New admin added!");
       setNewAdmin({ name: "", email: "", password: "" });
       fetchAllAdmins();
     } catch (err) {
-      alert("❌ Failed to add admin.");
+      // alert("❌ Failed to add admin.");
+      toast("❌ Failed to add admin.");
     } finally {
       setLoading(false);
     }
@@ -59,7 +63,8 @@ export default function AdminSettings() {
 
   const handleDeleteAdmin = async (id, email) => {
     if (email === admin?.email) {
-      alert("⚠️ You cannot delete your own admin account.");
+      // alert("⚠️ You cannot delete your own admin account.");
+      toast("⚠️ You cannot delete your own admin account.");
       return;
     }
     if (!window.confirm(`Delete admin: ${email}?`)) return;
@@ -68,14 +73,17 @@ export default function AdminSettings() {
     try {
       const response = await axios.delete(`/api/admin/delete/${id}`);
       if (response.data?.success) {
-        alert("✅ Admin deleted successfully.");
+        // alert("✅ Admin deleted successfully.");
+        toast("✅ Admin deleted successfully.");
         fetchAllAdmins();
       } else {
-        alert(`❌ Failed: ${response.data?.error || "Unknown error"}`);
+        // alert(`❌ Failed: ${response.data?.error || "Unknown error"}`);
+        toast(`❌ Failed: ${response.data?.error || "Unknown error"}`);
       }
     } catch (err) {
       console.error("Delete admin error:", err);
-      alert("❌ Unexpected error while deleting admin.");
+      // alert("❌ Unexpected error while deleting admin.");
+      toast("❌ Unexpected error while deleting admin.");
     } finally {
       setLoading(false);
     }

@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Handshake, UserCircle, UserCheck } from "lucide-react";
+import { Handshake, UserCircle, UserCheck, HandCoins } from "lucide-react";
 import axios from "axios";
+import toast from "react-hot-toast";
+import NotLoginPromptCard from "../extra/NotLoginPrompt";
 
 export default function MentorshipPageComp() {
   const [student, setStudent] = useState(null);
@@ -39,11 +41,13 @@ export default function MentorshipPageComp() {
   };
 
   const handleOfferMentorship = async (id) => {
-    alert(`Mentorship offered to ${id}`);
+    // alert(`Mentorship offered to ${id}`);
+    toast(`Mentorship offered to ${id}`);
   };
 
   const handleRequestMentorship = async (id) => {
-    alert(`Mentorship requested from ${id}`);
+    // alert(`Mentorship requested from ${id}`);
+    toast(`Mentorship requested from ${id}`);
   };
   const handleRemove = async (id) => {
     await axios.delete(`/api/connect?connId=${id}`);
@@ -54,9 +58,17 @@ export default function MentorshipPageComp() {
     return <p className="p-6 text-center">Loading mentorship data...</p>;
   if (!student)
     return (
-      <p className="min-h-screen flex items-center justify-center">
-        Please login to view mentorship.
-      </p>
+      <section className="flex flex-col items-center justify-center md:min-h-screen py-10 text-center px-6">
+        <HandCoins className="w-24 h-24 text-accent mb-6 drop-shadow-lg" />
+        <h1 className="text-4xl sm:text-6xl font-extrabold">
+          Get <span className="text-accent">Mentorship</span>
+        </h1>
+        <p className="my-4 text-lg sm:text-xl text-secondary max-w-2xl">
+          Connect with alumni and students. Grow together, mentor each other,
+          unlock opportunities.
+        </p>
+        <NotLoginPromptCard />
+      </section>
     );
 
   // Only accepted friends for mentorship

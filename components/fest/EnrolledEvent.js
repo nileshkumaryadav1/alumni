@@ -6,6 +6,7 @@ import CountdownTimer from "../custom/CountdownTimer";
 import LoadingState from "../custom/myself/LoadingState";
 import LoadingSkeletonSmall from "../custom/myself/LoadingSkeletonSmall";
 import LoadingSkeleton from "../custom/myself/LoadingSkeleton";
+import toast from "react-hot-toast";
 
 export default function EnrolledEvents({ studentId }) {
   const [events, setEvents] = useState([]);
@@ -39,10 +40,11 @@ export default function EnrolledEvents({ studentId }) {
         body: JSON.stringify({ studentId, eventId }),
       });
       if (res.ok) setEvents((prev) => prev.filter((e) => e._id !== eventId));
-      else alert("Failed to de-enroll from the event.");
+      else toast("Failed to de-enroll from the event.");
     } catch (err) {
       console.error("Error de-enrolling:", err);
-      alert("Something went wrong.");
+      // alert("Something went wrong.");
+      toast("Something went wrong.");
     }
   };
 
